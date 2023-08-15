@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name', 128);
             $table->string('description', 128);
             $table->string('dashboard_url', 128);
+            $table->unsignedTinyInteger('is_landing')->default(0);
             $table->string('createdBy')->default('System');
             $table->timestamp('createdAt');
             $table->string('updatedBy')->nullable(true)->default(null);
