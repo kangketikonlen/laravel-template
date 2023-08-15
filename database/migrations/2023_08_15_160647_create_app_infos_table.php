@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('logo');
             $table->string('background');
+            $table->string('description');
             $table->string('dev');
             $table->string('dev_url');
             $table->string('registered');
