@@ -5,8 +5,7 @@ const mix = require("laravel-mix");
  | Mix Asset Management
  |--------------------------------------------------------------------------
 */
-
-mix.options({
+mix.sass("resources/sass/styles.scss", "public/css").options({
     processCssUrls: false,
 });
 
