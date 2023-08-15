@@ -11,6 +11,7 @@ use Database\Seeders\System\RoleSeeder;
 use Database\Seeders\System\UserSeeder;
 use Database\Seeders\System\ModuleSeeder;
 use Database\Seeders\System\NavbarSeeder;
+use Database\Seeders\System\SubnavbarSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $seeder[] = NavbarSeeder::class;
+        $seeder[] = SubnavbarSeeder::class;
         $seeder[] = ModuleSeeder::class;
 
         if (AppInfo::count() == 0) {
