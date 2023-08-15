@@ -2,12 +2,18 @@
 
 namespace App\Models\System;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\System\Subnavbar;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Navbar extends Model
 {
     use HasFactory;
+
+    public function subnavbars()
+    {
+        return $this->hasMany(Subnavbar::class, 'navbar_id');
+    }
 
     protected static function boot()
     {

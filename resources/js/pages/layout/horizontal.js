@@ -1,1 +1,1 @@
-localStorage.setItem('laravel-template-template-placement', 'horizontal');
+localStorage.setItem('laravel-template-placement', 'horizontal');

@@ -106,7 +106,7 @@ class Scripts {
                     color: 'light-blue',
                     radius: 'standard'
                 },
-                showSettings: false, storagePrefix: 'fathtech-hrd-app-topbar-'
+                showSettings: false, storagePrefix: 'laravel-template-'
             });
         }
     }

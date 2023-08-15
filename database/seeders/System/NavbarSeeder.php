@@ -25,7 +25,7 @@ class NavbarSeeder extends Seeder
             'name' => 'Master',
             'icon' => 'database',
             'url' => '#',
-            'roles' => "support,admin",
+            'roles' => "general",
             'type' => 'dropdown'
         ]);
 
@@ -33,7 +33,7 @@ class NavbarSeeder extends Seeder
             'name' => 'Setting',
             'icon' => 'settings-1',
             'url' => '#',
-            'roles' => "support,admin",
+            'roles' => "general",
             'type' => 'dropdown'
         ]);
 
@@ -41,7 +41,7 @@ class NavbarSeeder extends Seeder
             'name' => 'Administrasi',
             'icon' => 'edit-square',
             'url' => '#',
-            'roles' => "support,admin",
+            'roles' => "general",
             'type' => 'dropdown'
         ]);
 
@@ -49,7 +49,7 @@ class NavbarSeeder extends Seeder
             'name' => 'Laporan',
             'icon' => 'book',
             'url' => '#',
-            'roles' => "support,admin",
+            'roles' => "general",
             'type' => 'dropdown'
         ]);
     }
