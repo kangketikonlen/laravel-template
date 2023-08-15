@@ -13,12 +13,12 @@ class AppInfoSeeder extends Seeder
     public function run(): void
     {
         AppInfo::create([
-            'name' => 'Laravel Template',
+            'name' => 'Larapulse',
             'logo' => '/storage/images/logo/default.png',
             'background' => '/storage/images/background/default.jpg',
-            'description' => 'Laravel template Anda adalah implementasi kustom dari kerangka kerja PHP populer, Laravel. Didesain sesuai kebutuhan dengan fitur dan optimasi yang disesuaikan untuk meningkatkan efisiensi, fleksibilitas, dan performa pengembangan.',
+            'description' => 'Larapulse Anda adalah implementasi kustom dari kerangka kerja PHP populer, Laravel. Didesain sesuai kebutuhan dengan fitur dan optimasi yang disesuaikan untuk meningkatkan efisiensi, fleksibilitas, dan performa pengembangan.',
             'dev' => 'Kangketik Dev',
-            'dev_url' => 'https://kangketik.web.id/',
+            'dev_url' => 'https://kangketik.online/',
             'registered' => 'Kangketik Developer'
         ]);
     }
