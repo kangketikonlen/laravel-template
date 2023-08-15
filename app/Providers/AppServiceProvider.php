@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\System\Module;
 use App\Models\System\Navbar;
 use App\Models\System\AppInfo;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Database\Eloquent\Model;
@@ -35,5 +36,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with('modules', $modules);
         });
         Paginator::useBootstrapFive();
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
