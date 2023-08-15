@@ -15,7 +15,8 @@ class AppInfoSeeder extends Seeder
         AppInfo::create([
             'name' => 'Laravel Template',
             'logo' => '/storage/images/logo/default.png',
-            'background' => '/storage/images/background/default.png',
+            'background' => '/storage/images/background/default.jpg',
+            'description' => 'Laravel template Anda adalah implementasi kustom dari kerangka kerja PHP populer, Laravel. Didesain sesuai kebutuhan dengan fitur dan optimasi yang disesuaikan untuk meningkatkan efisiensi, fleksibilitas, dan performa pengembangan.',
             'dev' => 'Kangketik Dev',
             'dev_url' => 'https://kangketik.web.id/',
             'registered' => 'Kangketik Developer'
