@@ -1,21 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\System;
 
-use App\Models\System\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Module extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    public function users()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+    use HasFactory;
 
     protected static function boot()
     {

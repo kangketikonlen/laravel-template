@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\System;
 
-use App\Models\System\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Subnavbar extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    public function users()
+    public function navbars()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(Navbar::class, 'navbar_id');
     }
 
     protected static function boot()
