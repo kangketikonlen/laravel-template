@@ -21,8 +21,8 @@ return new class extends Migration
             $table->timestamp('createdAt');
             $table->string('updatedBy')->nullable(true)->default(null);
             $table->timestamp('updatedAt')->nullable(true)->default(null);
-            $table->foreign('navbar_id')->references('id')->on('navbars')->onDelete('cascade');
             $table->timestamps();
+            $table->foreign('navbar_id')->references('id')->on('navbars')->onDelete('cascade');
         });
     }
 

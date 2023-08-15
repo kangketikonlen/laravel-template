@@ -17,12 +17,13 @@ return new class extends Migration
             $table->string('name', 128);
             $table->string('username', 128);
             $table->string('password');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->string('createdBy')->default('System');
             $table->timestamp('createdAt');
             $table->string('updatedBy')->nullable(true)->default(null);
             $table->timestamp('updatedAt')->nullable(true)->default(null);
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
     }
 
