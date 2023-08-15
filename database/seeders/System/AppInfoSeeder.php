@@ -14,7 +14,7 @@ class AppInfoSeeder extends Seeder
     {
         AppInfo::create([
             'name' => 'Larapulse',
-            'logo' => '/storage/images/logo/default.png',
+            'logo' => '/storage/images/logo/default.jpg',
             'background' => '/storage/images/background/default.jpg',
             'description' => 'Larapulse Anda adalah implementasi kustom dari kerangka kerja PHP populer, Laravel. Didesain sesuai kebutuhan dengan fitur dan optimasi yang disesuaikan untuk meningkatkan efisiensi, fleksibilitas, dan performa pengembangan.',
             'dev' => 'Kangketik Dev',

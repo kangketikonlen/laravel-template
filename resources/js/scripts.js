@@ -103,7 +103,7 @@ class Scripts {
                 attributes: {
                     placement: 'horizontal',
                     layout: 'boxed',
-                    color: 'light-blue',
+                    color: 'light-green',
                     radius: 'standard'
                 },
                 showSettings: false, storagePrefix: 'laravel-template-'
