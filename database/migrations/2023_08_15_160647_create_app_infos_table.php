@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('app_infos', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('logo');
-            $table->string('background');
             $table->string('description');
             $table->string('dev');
             $table->string('dev_url');
