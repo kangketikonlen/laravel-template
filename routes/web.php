@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\UserController;
+use App\Http\Controllers\Setting\AppInfoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,5 +37,12 @@ Route::namespace('Master')->prefix('master')->middleware('auth:web')->group(func
         Route::patch('/{user}/reset', [UserController::class, 'reset_password']);
         Route::delete('/{user}/delete', [UserController::class, 'delete']);
         Route::get('/options', [UserController::class, 'options']);
+    });
+});
+
+Route::namespace('Setting')->prefix('setting')->middleware('auth:web')->group(function () {
+    Route::prefix('info')->middleware('auth:web')->group(function () {
+        Route::get('/', [AppInfoController::class, 'index']);
+        Route::put('/update', [AppInfoController::class, 'update']);
     });
 });
