@@ -30,6 +30,7 @@ class PortalController extends Controller
             $session = array(
                 'id' => $user->id,
                 'name' => $user->name,
+                'picture' => $user->picture,
                 'role_id' => $user->role_id,
                 'role_name' => $user->roles->name,
                 'role_description' => $user->roles->description,

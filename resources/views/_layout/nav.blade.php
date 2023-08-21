@@ -11,7 +11,7 @@
     <div class="user-container d-flex">
         <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
-            <img class="profile" alt="profile" src="/img/profile/ikon.png" />
+            <img class="profile" alt="profile" src="{{ session('picture') }}" />
             <div class="name">{{ session('name') }}</div>
         </a>
         <div class="dropdown-menu dropdown-menu-end user-menu wide">

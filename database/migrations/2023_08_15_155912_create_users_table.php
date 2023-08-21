@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->string('name', 128);
+            $table->string('picture')->default('/storage/images/profile/default.png');
             $table->string('username', 128);
             $table->string('password');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
