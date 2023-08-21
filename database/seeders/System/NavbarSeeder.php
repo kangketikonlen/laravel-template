@@ -33,7 +33,7 @@ class NavbarSeeder extends Seeder
             'name' => 'Setting',
             'icon' => 'settings-1',
             'url' => '#',
-            'roles' => "",
+            'roles' => "general",
             'type' => 'dropdown'
         ]);
 
