@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\System\AppInfo;
+use App\Models\System\Institution;
 use Illuminate\Support\Facades\Session;
 
 class PortalController extends Controller
@@ -11,6 +12,7 @@ class PortalController extends Controller
     public function index()
     {
         $data['info'] = AppInfo::first();
+        $data['institution'] = Institution::first();
         return view('pages.portal', $data);
     }
 

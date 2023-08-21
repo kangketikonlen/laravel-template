@@ -12,7 +12,8 @@
 <body class="h-100">
     <div id="root" class="h-100">
         <!-- Background Start -->
-        <div class="fixed-background" style="background: url('{{ $info->background }}') no-repeat center center fixed">
+        <div class="fixed-background"
+            style="background: url('{{ $institution->background }}') no-repeat center center fixed">
         </div>
         <!-- Background End -->
 

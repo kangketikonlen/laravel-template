@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\System\Module;
 use App\Models\System\Navbar;
 use App\Models\System\AppInfo;
+use App\Models\System\Institution;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -30,9 +31,11 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $navbars = Navbar::get();
             $appInfo = AppInfo::first();
+            $institution = Institution::first();
             $modules = Module::get();
             $view->with('navbars', $navbars);
             $view->with('appInfo', $appInfo);
+            $view->with('institution', $institution);
             $view->with('modules', $modules);
         });
         Paginator::useBootstrapFive();

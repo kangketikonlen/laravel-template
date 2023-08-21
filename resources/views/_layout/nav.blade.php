@@ -2,7 +2,7 @@
     <!-- Logo Start -->
     <div class="logo position-relative">
         <a href="{{ session()->get('role_url') }}">
-            <img src="{{ $appInfo->logo }}" alt="logo" class="img-responsive shadow sw-9" />
+            <img src="{{ $institution->logo }}" alt="logo" class="img-responsive shadow sw-9" />
         </a>
     </div>
     <!-- Logo End -->

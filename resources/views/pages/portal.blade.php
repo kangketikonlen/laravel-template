@@ -21,7 +21,7 @@
             <div>
                 <div class="mb-4">
                     <h1 class="display-3 px-6 text-dark fw-bold m-0">{{ $info->name }} </h1>
-                    <h1 class="display-6 px-6 text-dark fw-bold m-0">{{ $info->registered }}</h1>
+                    <h1 class="display-6 px-6 text-dark fw-bold m-0">{{ $institution->name }}</h1>
                 </div>
                 <p class="h6 text-dark lh-1-5 mb-4 px-6">
                     {{ $info->description }}
@@ -30,7 +30,9 @@
                     <img src="{{ $info->sponsor_logo }}" alt="sponsor_logo" class="sh-4">
                 @endif
                 <div class="mb-4">
-                    <p class="px-6 text-dark fw-bold m-0">&copy; 2023 | {{ $info->registered }} </p>
+                    <p class="px-6 text-dark fw-bold m-0">
+                        &copy; 2023 | {{ $info->registered }} | {{ $institution->address }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -42,7 +44,7 @@
         class="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
         <div class="sw-lg-50 px-5 text-center">
             <a href="/">
-                <img src="{{ $info->logo }}" alt="logo-default">
+                <img src="{{ $institution->logo }}" alt="logo-default">
             </a>
             <div class="mb-4">
                 <h2 class="cta-1 mb-0 text-primary">Portal Login,</h2>
