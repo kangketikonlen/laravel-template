@@ -18,5 +18,11 @@ class SubnavbarSeeder extends Seeder
             'url' => '/setting/info',
             'roles' => 'general'
         ]);
+        Subnavbar::create([
+            'navbar_id' => '2',
+            'name' => 'Informasi Institusi',
+            'url' => '/setting/institution',
+            'roles' => 'general'
+        ]);
     }
 }
