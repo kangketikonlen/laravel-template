@@ -19,7 +19,7 @@
                 <div class="col-6 ps-1 pe-1">
                     <ul class="list-unstyled">
                         <li>
-                            <a href="#">
+                            <a href="/profile">
                                 <i data-acorn-icon="gear" class="me-2" data-acorn-size="17"></i>
                                 <span class="align-middle">Settings</span>
                             </a>

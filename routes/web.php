@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\UserController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Setting\InstitutionController;
 
 /*
@@ -18,6 +19,12 @@ use App\Http\Controllers\Setting\InstitutionController;
 Route::namespace('Portal')->middleware('guest')->group(function () {
     Route::get('/', [PortalController::class, 'index'])->name('portal');
     Route::post('/auth', [PortalController::class, 'auth']);
+});
+
+Route::namespace('Profile')->prefix('profile')->middleware('auth:web')->group(function () {
+    Route::get('/', [ProfileController::class, 'index']);
+    Route::put('/update', [ProfileController::class, 'update']);
+    Route::get('/reset', [ProfileController::class, 'reset']);
 });
 
 Route::namespace('Dashboard')->prefix('dashboard')->middleware('auth:web')->group(function () {
