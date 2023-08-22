@@ -30,6 +30,7 @@
             </div>
             <!-- Search End -->
             <div class="col-sm-12 col-md-7 col-lg-9 col-xxl-10 text-end mb-1">
+                <x-buttons.filter />
                 <x-buttons.clear :link="$url" />
             </div>
         </div>
@@ -88,4 +89,5 @@
         </div>
         <!-- Item List End -->
     </div>
+    <x-modal.activity-log :link="$url" />
 @endsection

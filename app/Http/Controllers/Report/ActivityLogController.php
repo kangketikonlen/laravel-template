@@ -12,8 +12,16 @@ class ActivityLogController extends Controller
 
     public function index(Request $request)
     {
+        $activityLogs = ActivityLog::orderBy('id', 'desc');
+        $dateStart = $request->input('dateStart');
+        $dateEnd = $request->input('dateEnd');
+
+        if (!empty($dateStart)) {
+            $activityLogs->whereBetween('date', [$dateStart, $dateEnd]);
+        }
+
         $data['query'] = $request->input('query');
-        $data['activityLog'] = ActivityLog::orderBy('id', 'desc')->paginate(10)->appends(request()->query());
+        $data['activityLog'] = $activityLogs->paginate(10)->appends(request()->query());
         return view('pages.report.activity-log.index', $data);
     }
 
