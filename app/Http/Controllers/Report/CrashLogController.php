@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Administration;
+namespace App\Http\Controllers\Report;
 
-use App\Http\Controllers\Controller;
-use App\Models\System\CrashLog;
 use Illuminate\Http\Request;
+use App\Models\System\CrashLog;
+use App\Http\Controllers\Controller;
 
 class CrashLogController extends Controller
 {
-    protected $url = "/administration/crash-log";
+    protected $url = "/report/crash-log";
 
     public function index(Request $request)
     {
         $data['query'] = $request->input('query');
         $data['crashLogs'] = CrashLog::orderBy('id', 'desc')->paginate(10)->appends(request()->query());
-        return view('pages.administration.crash-log.index', $data);
+        return view('pages.report.crash-log.index', $data);
     }
 
     public function clear()

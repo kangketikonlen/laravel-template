@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Administration;
+namespace App\Http\Controllers\Report;
 
-use App\Http\Controllers\Controller;
-use App\Models\System\ActivityLog;
 use Illuminate\Http\Request;
+use App\Models\System\ActivityLog;
+use App\Http\Controllers\Controller;
 
 class ActivityLogController extends Controller
 {
-    protected $url = "/administration/activity-log";
+    protected $url = "/report/activity-log";
 
     public function index(Request $request)
     {
         $data['query'] = $request->input('query');
         $data['activityLog'] = ActivityLog::orderBy('id', 'desc')->paginate(10)->appends(request()->query());
-        return view('pages.administration.activity-log.index', $data);
+        return view('pages.report.activity-log.index', $data);
     }
 
     public function clear()
