@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Administration\ActivityLogController;
 use App\Http\Controllers\Administration\CrashLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortalController;
@@ -52,5 +53,9 @@ Route::namespace('Administration')->prefix('administration')->middleware('auth:w
     Route::prefix('crash-log')->middleware('auth:web')->group(function () {
         Route::get('/', [CrashLogController::class, 'index']);
         Route::delete('/clear', [CrashLogController::class, 'clear']);
+    });
+    Route::prefix('activity-log')->middleware('auth:web')->group(function () {
+        Route::get('/', [ActivityLogController::class, 'index']);
+        Route::delete('/clear', [ActivityLogController::class, 'clear']);
     });
 });
