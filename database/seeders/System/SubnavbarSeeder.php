@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\System;
 
-use Database\Seeders\General\Master\SubnavbarSeeder as MasterSubnavbarSeeder;
-use Database\Seeders\General\Setting\SubnavbarSeeder as SettingSubnavbarSeeder;
+use Database\Seeders\System\Subnavbar\MasterSubnavbarSeeder;
+use Database\Seeders\System\Subnavbar\SettingSubnavbarSeeder;
 use Illuminate\Database\Seeder;
 
 class SubnavbarSeeder extends Seeder

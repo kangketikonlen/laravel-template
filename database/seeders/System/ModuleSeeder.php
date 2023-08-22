@@ -3,9 +3,9 @@
 namespace Database\Seeders\System;
 
 use App\Models\System\Module;
+use Database\Seeders\System\Module\SupportModuleSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Database\Seeders\Support\ModuleSeeder as SupportModuleSeeder;
 
 class ModuleSeeder extends Seeder
 {

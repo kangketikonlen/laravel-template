@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Seeders\General\Setting;
+namespace Database\Seeders\System\Subnavbar;
 
 use Illuminate\Database\Seeder;
 use App\Models\System\Subnavbar;
 
-class SubnavbarSeeder extends Seeder
+class SettingSubnavbarSeeder extends Seeder
 {
     /**
      * Run the database seeds.
