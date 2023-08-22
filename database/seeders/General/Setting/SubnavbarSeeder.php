@@ -14,12 +14,6 @@ class SubnavbarSeeder extends Seeder
     {
         Subnavbar::create([
             'navbar_id' => '2',
-            'name' => 'Informasi Aplikasi',
-            'url' => '/setting/info',
-            'roles' => 'general'
-        ]);
-        Subnavbar::create([
-            'navbar_id' => '2',
             'name' => 'Informasi Institusi',
             'url' => '/setting/institution',
             'roles' => 'general'

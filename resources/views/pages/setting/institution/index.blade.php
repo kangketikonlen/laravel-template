@@ -37,7 +37,7 @@
                     <x-alert :status="$status" :message="$message" />
                 @endif
                 <div class="row g-3 mb-3">
-                    <div class="col text-center">
+                    <div class="col">
                         @error('logo')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -52,7 +52,7 @@
                             <input name="logo" class="file-upload d-none" type="file">
                         </div>
                     </div>
-                    <div class="col text-center">
+                    <div class="col">
                         @error('background')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

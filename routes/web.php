@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\UserController;
-use App\Http\Controllers\Setting\AppInfoController;
 use App\Http\Controllers\Setting\InstitutionController;
 
 /*
@@ -42,10 +41,6 @@ Route::namespace('Master')->prefix('master')->middleware('auth:web')->group(func
 });
 
 Route::namespace('Setting')->prefix('setting')->middleware('auth:web')->group(function () {
-    Route::prefix('info')->middleware('auth:web')->group(function () {
-        Route::get('/', [AppInfoController::class, 'index']);
-        Route::put('/update', [AppInfoController::class, 'update']);
-    });
     Route::prefix('institution')->middleware('auth:web')->group(function () {
         Route::get('/', [InstitutionController::class, 'index']);
         Route::put('/update', [InstitutionController::class, 'update']);

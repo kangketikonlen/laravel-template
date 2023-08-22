@@ -13,8 +13,9 @@
     <div id="root" class="h-100">
         <!-- Background Start -->
         <div class="fixed-background"
-            style="background: url('{{ $institution->background }}') no-repeat center center fixed">
+            style="background: url('{{ $institution->background }}') no-repeat center center fixed; background-size: cover;">
         </div>
+
         <!-- Background End -->
 
         <div class="container-fluid p-0 h-100 position-relative">
