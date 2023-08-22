@@ -14,14 +14,8 @@ class AdministrationSubnavbarSeeder extends Seeder
     {
         Subnavbar::create([
             'navbar_id' => '3',
-            'name' => 'Riwayat Error',
-            'url' => '/administration/crash-log',
-            'roles' => 'general'
-        ]);
-        Subnavbar::create([
-            'navbar_id' => '3',
-            'name' => 'Riwayat Aktivitas',
-            'url' => '/administration/activity-log',
+            'name' => 'Maintenance Mode',
+            'url' => '/administration/maintenance',
             'roles' => 'general'
         ]);
     }

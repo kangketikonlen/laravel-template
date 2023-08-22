@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('sponsor')->default(null)->nullable(true);
             $table->string('sponsor_url')->default(null)->nullable(true);
             $table->string('sponsor_logo')->default(null)->nullable(true);
+            $table->unsignedTinyInteger('is_maintenance')->default(0);
             $table->string('createdBy')->default('System');
             $table->timestamp('createdAt');
             $table->string('updatedBy')->nullable(true)->default(null);

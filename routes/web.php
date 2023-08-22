@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Administration\MaintenanceController;
 use App\Http\Controllers\Report\ActivityLogController;
 use App\Http\Controllers\Report\CrashLogController;
 use Illuminate\Support\Facades\Route;
@@ -50,10 +51,10 @@ Route::namespace('Setting')->prefix('setting')->middleware('auth:web')->group(fu
 });
 
 Route::namespace('Administration')->prefix('administration')->middleware('auth:web')->group(function () {
-    // Route::prefix('crash-log')->middleware('auth:web')->group(function () {
-    //     Route::get('/', [CrashLogController::class, 'index']);
-    //     Route::delete('/clear', [CrashLogController::class, 'clear']);
-    // });
+    Route::prefix('maintenance')->middleware('auth:web')->group(function () {
+        Route::get('/', [MaintenanceController::class, 'index']);
+        Route::get('/process', [MaintenanceController::class, 'process']);
+    });
 });
 
 Route::namespace('Report')->prefix('report')->middleware('auth:web')->group(function () {
