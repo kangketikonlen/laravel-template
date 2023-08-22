@@ -2,7 +2,7 @@
     $html_tag_data = [];
     $title = 'Data Riwayat Error';
     $description = 'View Riwayat Error';
-    $url = '/administration/crash-log';
+    $url = '/report/crash-log';
     $breadcrumbs = ['/' => 'Home'];
 @endphp
 @extends('layout-private', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])

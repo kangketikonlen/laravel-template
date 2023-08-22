@@ -60,8 +60,10 @@ Route::namespace('Administration')->prefix('administration')->middleware('auth:w
 Route::namespace('Report')->prefix('report')->middleware('auth:web')->group(function () {
     Route::prefix('crash-log')->middleware('auth:web')->group(function () {
         Route::get('/', [CrashLogController::class, 'index']);
+        Route::delete('/clear', [CrashLogController::class, 'clear']);
     });
     Route::prefix('activity-log')->middleware('auth:web')->group(function () {
         Route::get('/', [ActivityLogController::class, 'index']);
+        Route::delete('/clear', [ActivityLogController::class, 'clear']);
     });
 });

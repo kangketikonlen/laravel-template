@@ -2,7 +2,7 @@
     $html_tag_data = [];
     $title = 'Data Riwayat Audit';
     $description = 'View Riwayat Audit';
-    $url = '/administration/activity-log';
+    $url = '/report/activity-log';
     $breadcrumbs = ['/' => 'Home'];
 @endphp
 @extends('layout-private', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
