@@ -12,8 +12,16 @@ class CrashLogController extends Controller
 
     public function index(Request $request)
     {
+        $crashLogs = CrashLog::orderBy('id', 'desc');
+        $dateStart = $request->input('dateStart');
+        $dateEnd = $request->input('dateEnd');
+
+        if (!empty($dateStart)) {
+            $crashLogs->whereBetween('date', [$dateStart, $dateEnd]);
+        }
+
         $data['query'] = $request->input('query');
-        $data['crashLogs'] = CrashLog::orderBy('id', 'desc')->paginate(10)->appends(request()->query());
+        $data['crashLogs'] = $crashLogs->paginate(10)->appends(request()->query());
         return view('pages.report.crash-log.index', $data);
     }
 
