@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - "testing"
+
+env:
+  IMAGE_NAME: ${{ github.event.repository.name }}
+
+name: 🎯 Just testing.
+jobs:
+  build:
+    name: 📦 Build the app
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🐙 Git checkout
+      uses: actions/checkout@v3
+
+    - name: 📁 Make sure repository is latest
+      run: git fetch --prune --unshallow
+
+    - name: 🛳️ Push image
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        LATEST_TAG=$(echo $LATEST_TAG | sed -e 's/^v//')
+        echo IMAGE_ID=$IMAGE_ID
+        echo LATEST_TAG=$LATEST_TAG
+        echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
+        echo "::set-output name=build_tag::$LATEST_TAG"
+  deploy:
+    needs: build
+    name: 🖥️ Upload to server
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+
+    steps:
+    - name: 🐙 Git checkout
+      uses: actions/checkout@v3
+
+    - name: 📁 Make sure repository is latest
+      run: git fetch --prune --unshallow
+
+    - name: Get NEW_TAG output from build job
+      run: |
+        echo "Deploying using tag: ${{ needs.build.outputs.build_tag }}"
