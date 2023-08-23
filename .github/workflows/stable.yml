@@ -1,12 +1,12 @@
 on:
   push:
     branches:
-      - "testing"
+      - "production"
 
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
 
-name: 📜 Tests the app
+name: 📜 Test, pack & ship!
 jobs:
   test:
     name: ✅ Run Tests
@@ -55,6 +55,7 @@ jobs:
       - name: ✅ Run php tests
         run: vendor/bin/phpunit
   tagging:
+    name: 🏷️ Tagging the app
     needs: test
     runs-on: ubuntu-latest
     environment:
@@ -75,6 +76,7 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           PRESERVE_VERSION: 5
   build:
+    name: 📦 Build the app
     needs: tagging
     runs-on: ubuntu-latest
     environment:
@@ -104,6 +106,7 @@ jobs:
         docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
         docker push $IMAGE_ID:$LATEST_TAG
   deploy:
+    name: 🖥️ Upload to server
     needs: build
     runs-on: ubuntu-latest
     environment:
