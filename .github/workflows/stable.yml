@@ -25,62 +25,62 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-    - name: 🐙 Git checkout
-      uses: actions/checkout@v3
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
 
-    - name: 📑 Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: 📑 Set up PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: 8.1
+
+      - name: ⏳ Install dependencies
+        run: composer install --no-interaction
+
+      - name: 📄 Create environment
+        run: cp .env.example .env
+
+      - name: 🔑 Generate app key
+        run: php artisan key:generate
+
+      - name: 💽 Set up database
+        run: php artisan migrate --seed --env=testing
+
+      - name: 🗺️ Check routes
+        run: php artisan route:clear && php artisan route:list
+
+      - name: ✅ Run tests
+        run: vendor/bin/phpunit
+
+      - name: 📁 Make sure repository is latest
+        run: git fetch --prune --unshallow
+
+      - name: 🐳 Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+
+      - name: 🔑 Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: 🛳️ Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          LATEST_TAG=$(echo $LATEST_TAG | sed -e 's/^v//')
+          echo IMAGE_ID=$IMAGE_ID
+          echo LATEST_TAG=$LATEST_TAG
+          echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
+          docker push $IMAGE_ID:$LATEST_TAG
+
+      - name: 🚀 Update server
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         with:
-          php-version: 8.1
-
-    - name: ⏳ Install dependencies
-      run: composer install --no-interaction
-
-    - name: 📄 Create environment
-      run: cp .env.example .env
-
-    - name: 🔑 Generate app key
-      run: php artisan key:generate
-
-    - name: 💽 Set up database
-      run: php artisan migrate --seed --env=testing
-
-    - name: 🗺️ Check routes
-      run: php artisan route:clear && php artisan route:list
-
-    - name: ✅ Run tests
-      run: vendor/bin/phpunit
-
-    - name: 📁 Make sure repository is latest
-      run: git fetch --prune --unshallow
-
-    - name: 🐳 Build image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-
-    - name: 🔑 Log in to registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-    - name: 🛳️ Push image
-      run: |
-        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-        LATEST_TAG=$(echo $LATEST_TAG | sed -e 's/^v//')
-        echo IMAGE_ID=$IMAGE_ID
-        echo LATEST_TAG=$LATEST_TAG
-        echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
-        docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
-        docker push $IMAGE_ID:$LATEST_TAG
-
-    - name: 🚀 Update server
-      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-      with:
-        host: ${{ secrets.SERVER }}
-        user: ${{ secrets.USERNAME }}
-        pass: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        connect_timeout: 120s
-        first_ssh: |
-          cd ${{ secrets.DIRECTORY }}
-          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
-          bash run.sh
+          host: ${{ secrets.SERVER }}
+          user: ${{ secrets.USERNAME }}
+          pass: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          connect_timeout: 120s
+          first_ssh: |
+            cd ${{ secrets.DIRECTORY }}
+            sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
+            bash run.sh
