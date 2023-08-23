@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - "!main"
+      - "!stable"
+
+name: 📜 Tests App
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+
+      - name: Install dependencies
+        run: composer install --no-interaction
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Generate app key
+        run: php artisan key:generate
+
+      - name: Run tests
+        run: vendor/bin/phpunit
