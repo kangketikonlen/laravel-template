@@ -18,7 +18,7 @@ jobs:
       - name: 🛠️ Install dependencies
         run: composer install --no-interaction
       - name: 📦 Create vendor archive
-        run: tar -cvzf vendor.tar.gz vendor
+        run: zip -r vendor.zip vendor
       - name: 📦 Upload vendor folder
         uses: actions/upload-artifact@v2
         with:
@@ -36,6 +36,6 @@ jobs:
         with:
           name: vendor
       - name: 📦 Extract vendor archive
-        run: ls -al
+        run: unzip -o vendor.zip -d vendor
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
