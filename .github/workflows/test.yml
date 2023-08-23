@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: vendor
-          path: vendor.tar.gz
+          path: vendor.zip
   phpstan:
     needs: setup
     name: 🚦 PHPStan analysis
