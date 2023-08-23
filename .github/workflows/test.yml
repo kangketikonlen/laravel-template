@@ -1,0 +1,76 @@
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+
+name: 🚀 CI Test Workflow
+jobs:
+  setup:
+    name: 🛠️ Set Up
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
+      - name: 📁 Make sure repository is latest
+        run: git fetch --prune --unshallow
+      - name: 🛠️ Install dependencies
+        run: composer install --no-interaction
+      - name: 📦 Create vendor archive
+        run: zip -r vendor.zip vendor
+      - name: 📦 Upload vendor folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: vendor
+          path: vendor.zip
+  phpstan:
+    needs: setup
+    name: 🚦 PHPStan analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
+      - name: 📦 Download vendor folder
+        uses: actions/download-artifact@v3
+        with:
+          name: vendor
+      - name: 📦 Extract vendor archive
+        run: unzip vendor.zip
+      - name: 🚦 Analyze with PHPStan
+        run: composer phpstan
+  phpunit:
+    needs: [setup, phpstan]
+    name: ✅ Run phpunit
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testing
+          MYSQL_DATABASE: larapulse
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
+      - name: 📦 Download vendor folder
+        uses: actions/download-artifact@v3
+        with:
+          name: vendor
+      - name: 📦 Extract vendor archive
+        run: unzip vendor.zip
+      - name: 📑 Set up php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+      - name: 📄 Create environment
+        run: cp .env.example .env
+      - name: 🔑 Generate app key
+        run: php artisan key:generate
+      - name: 💽 Set up database
+        run: php artisan migrate --seed --env=testing
+      - name: 🗺️ Check routes
+        run: php artisan route:clear && php artisan route:list
+      - name: ✅ Run php tests
+        run: vendor/bin/phpunit
