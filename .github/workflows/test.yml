@@ -17,11 +17,13 @@ jobs:
         run: git fetch --prune --unshallow
       - name: 🛠️ Install dependencies
         run: composer install --no-interaction
+      - name: 📦 Create vendor archive
+        run: tar -cvzf vendor.tar.gz vendor
       - name: 📦 Upload vendor folder
         uses: actions/upload-artifact@v2
         with:
           name: vendor
-          path: vendor
+          path: vendor.tar.gz
   phpstan:
     needs: setup
     name: 🚦 PHPStan analysis
@@ -33,5 +35,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: vendor
+      - name: 📦 Extract vendor archive
+        run: tar -xvzf vendor.tar.gz -C vendor
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
