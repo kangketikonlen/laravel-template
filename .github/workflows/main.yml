@@ -24,12 +24,12 @@ jobs:
     - name: 🚀 Update server
       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
       with:
-        host: ${{ secrets.PROD_SERVER }}
-        user: ${{ secrets.PROD_USERNAME }}
-        pass: ${{ secrets.PROD_PASSWORD }}
-        port: ${{ secrets.PROD_PORT }}
+        host: ${{ secrets.SERVER }}
+        user: ${{ secrets.USERNAME }}
+        pass: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
         connect_timeout: 120s
         first_ssh: |
-          cd ${{ secrets.PROD_DIR }}
+          cd ${{ secrets.DIRECTORY }}
           sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
           bash run.sh

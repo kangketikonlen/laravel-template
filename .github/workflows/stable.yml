@@ -38,16 +38,3 @@ jobs:
         echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
         docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
         docker push $IMAGE_ID:$LATEST_TAG
-
-    - name: 🚀 Update server
-      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-      with:
-        host: ${{ secrets.SERVER }}
-        user: ${{ secrets.USERNAME }}
-        pass: ${{ secrets.PASSOWRD }}
-        port: ${{ secrets.PORT }}
-        connect_timeout: 120s
-        first_ssh: |
-          cd ${{ secrets.DIRECTORY }}
-          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
-          bash run.sh
