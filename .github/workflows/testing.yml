@@ -27,8 +27,7 @@ jobs:
         LATEST_TAG=$(echo $LATEST_TAG | sed -e 's/^v//')
         echo IMAGE_ID=$IMAGE_ID
         echo LATEST_TAG=$LATEST_TAG
-        echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
-        echo "::set-output name=build_tag::$LATEST_TAG"
+        echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_OUTPUT
   deploy:
     needs: build
     name: 🖥️ Upload to server
@@ -46,4 +45,4 @@ jobs:
 
     - name: Get NEW_TAG output from build job
       run: |
-        echo "Deploying using tag: ${{ needs.build.outputs.build_tag }}"
+        echo "Deploying using tag: ${{ needs.build.outputs.NEW_TAG }}"
