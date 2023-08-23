@@ -9,7 +9,6 @@ name: 🚀 CI Test Workflow
 jobs:
   phpstan:
     name: 🚦 PHPStan analysis
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: 🛠️ Install dependencies
