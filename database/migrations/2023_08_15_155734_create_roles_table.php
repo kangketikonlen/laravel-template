@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('dashboard_url', 128);
             $table->unsignedTinyInteger('is_landing')->default(0);
             $table->string('createdBy')->default('System');
-            $table->timestamp('createdAt');
+            $table->timestamp('createdAt')->default(now());
             $table->string('updatedBy')->nullable(true)->default(null);
             $table->timestamp('updatedAt')->nullable(true)->default(null);
             $table->timestamps();
