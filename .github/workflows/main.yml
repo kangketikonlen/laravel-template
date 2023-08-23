@@ -11,7 +11,7 @@ jobs:
   test:
     name: ✅ Run Tests
     runs-on: ubuntu-latest
-
+    environment: production
     services:
       mysql:
         image: mysql:8.0
@@ -21,48 +21,37 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
-
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
-
       - name: 📑 Set up php
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-
       - name: ⏳ Install dependencies
         run: composer install --no-interaction
-
       - name: 📄 Create environment
         run: cp .env.example .env
-
       - name: 🔑 Generate app key
         run: php artisan key:generate
-
       - name: 💽 Set up database
         run: php artisan migrate --seed --env=testing
-
       - name: 🗺️ Check routes
         run: php artisan route:clear && php artisan route:list
-
       - name: ✅ Run php tests
         run: vendor/bin/phpunit
   tagging:
     needs: test
     name: 🏷️ Tagging the app
     runs-on: ubuntu-latest
-
+    environment: production
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
-
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
-
       - name: 🔖 Create tag
         uses: kangketikonlen/base-tagging@main
         env:
@@ -75,22 +64,18 @@ jobs:
     needs: [test, tagging]
     name: 📦 Build the app
     runs-on: ubuntu-latest
+    environment: production
     outputs:
       latest_version: ${{steps.push-image.outputs.version}}
-
     steps:
     - name: 🐙 Git checkout
       uses: actions/checkout@v3
-
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
-
     - name: 🐳 Build image
       run: docker build . --file Dockerfile --tag $image_name --label "runnumber=${GITHUB_RUN_ID}"
-
     - name: 🔑 Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
     - id: push-image
       name: 🛳️ Push image
       run: |
@@ -108,14 +93,11 @@ jobs:
     name: 🖥️ Upload to server
     runs-on: ubuntu-latest
     environment: production
-
     steps:
     - name: 🐙 Git checkout
       uses: actions/checkout@v3
-
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
-
     - name: 🚀 Update server
       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
       with:
@@ -133,14 +115,12 @@ jobs:
     name: 🌐 Check Server Status
     runs-on: ubuntu-latest
     environment: production
-
     steps:
       - name: 🛎️ Check Server Status
         run: |
           server_ip=${{ secrets.SERVER }}
           server_port=${{ secrets.WEB_PORT }}
           response=$(curl -s -o /dev/null -w "%{http_code}" http://$server_ip:$server_port)
-
           if [[ "$response" -eq 200 ]]; then
             echo "Server is up and running!"
           else
