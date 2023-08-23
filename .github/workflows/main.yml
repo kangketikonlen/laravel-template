@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "stable"
+      - "main"
 
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
@@ -16,6 +16,15 @@ jobs:
 
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
+
+    - name: 🔖 Create tag
+      uses: kangketikonlen/base-tagging@main
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        REPO_TYPE: ${{ github.event.repository.owner.type }}
+        REPO_OWNER: ${{ github.event.repository.owner.name }}
+        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        PRESERVE_VERSION: 25
 
     - name: 🐳 Build image
       run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
@@ -34,3 +43,16 @@ jobs:
         echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
         docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
         docker push $IMAGE_ID:$LATEST_TAG
+
+    # - name: 🚀 Update server
+    #   uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+    #   with:
+    #     host: ${{ secrets.PROD_SERVER }}
+    #     user: ${{ secrets.PROD_USERNAME }}
+    #     pass: ${{ secrets.PROD_PASSWORD }}
+    #     port: ${{ secrets.PROD_PORT }}
+    #     connect_timeout: 120s
+    #     first_ssh: |
+    #       cd ${{ secrets.PROD_DIR }}
+    #       sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
+    #       bash run.sh
