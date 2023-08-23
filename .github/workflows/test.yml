@@ -6,7 +6,7 @@ on:
       - "!stable"
       - "!version"
 
-name: 📜 Tests App
+name: 📜 Tests the app
 jobs:
   test:
     name: Run Tests
