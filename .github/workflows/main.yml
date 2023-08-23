@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "main"
+      - "testing"
 
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
@@ -31,5 +31,5 @@ jobs:
         connect_timeout: 120s
         first_ssh: |
           cd ${{ secrets.DIRECTORY }}
-          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
           bash run.sh
+          exit
