@@ -4,7 +4,7 @@ on:
       - "testing"
 
 env:
-  IMAGE_NAME: ${{ github.event.repository.name }}
+  image_name: ${{ github.event.repository.name }}
 
 name: 🎯 Just testing.
 jobs:
@@ -21,28 +21,19 @@ jobs:
 
     - name: 🛳️ Push image
       run: |
-        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-        LATEST_TAG=$(echo $LATEST_TAG | sed -e 's/^v//')
-        echo IMAGE_ID=$IMAGE_ID
-        echo LATEST_TAG=$LATEST_TAG
-        echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_OUTPUT
+        image_id=ghcr.io/${{ github.repository_owner }}/$image_name
+        image_id=$(echo $image_id | tr '[A-Z]' '[a-z]')
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        latest_tag=$(echo $latest_tag | sed -e 's/^v//')
+        echo image_id=$image_id
+        echo latest_tag=$latest_tag
+        echo "latest_version=$latest_tag" >> $GITHUB_OUTPUT
   deploy:
     needs: build
     name: 🖥️ Upload to server
     runs-on: ubuntu-latest
 
-    environment:
-      name: production
-
     steps:
-    - name: 🐙 Git checkout
-      uses: actions/checkout@v3
-
-    - name: 📁 Make sure repository is latest
-      run: git fetch --prune --unshallow
-
     - name: Get NEW_TAG output from build job
       run: |
-        echo "Deploying using tag: ${{ needs.build.outputs.NEW_TAG }}"
+        echo "Deploying using tag: ${{ needs.build.outputs.latest_version }}"
