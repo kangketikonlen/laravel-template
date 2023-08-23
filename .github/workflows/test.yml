@@ -22,7 +22,3 @@ jobs:
 
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
-
-      - name: 🛑 Stop workflow on PHPStan error
-        if: ${{ failure() }}
-        run: exit 1
