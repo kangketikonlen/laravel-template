@@ -6,7 +6,7 @@ on:
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
 
-name: 📦 Build, Pack and Ship!
+name: 💽 Create docker image
 jobs:
   build:
     runs-on: ubuntu-latest
