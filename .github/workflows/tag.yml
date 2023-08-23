@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: stagging
+      name: testing
 
     steps:
     - name: 🐙 Git checkout

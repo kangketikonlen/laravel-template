@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: stagging
+      name: testing
 
     services:
       mysql:
