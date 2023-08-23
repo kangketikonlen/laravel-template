@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('sponsor_logo')->default(null)->nullable(true);
             $table->unsignedTinyInteger('is_maintenance')->default(0);
             $table->string('createdBy')->default('System');
-            $table->timestamp('createdAt');
+            $table->timestamp('createdAt')->default(now());
             $table->string('updatedBy')->nullable(true)->default(null);
             $table->timestamp('updatedAt')->nullable(true)->default(null);
             $table->timestamps();

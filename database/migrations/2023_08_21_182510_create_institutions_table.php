@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('appUrl');
             $table->string('contact')->nullable(true)->default(null);
             $table->string('createdBy')->default('System');
-            $table->timestamp('createdAt');
+            $table->timestamp('createdAt')->default(now());
             $table->string('updatedBy')->nullable(true)->default(null);
             $table->timestamp('updatedAt')->nullable(true)->default(null);
             $table->timestamps();
