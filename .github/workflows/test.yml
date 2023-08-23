@@ -9,6 +9,7 @@ jobs:
   setup:
     name: 🛠️ Set Up
     runs-on: ubuntu-latest
+    environment: testing
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
@@ -27,6 +28,7 @@ jobs:
     needs: setup
     name: 🚦 PHPStan analysis
     runs-on: ubuntu-latest
+    environment: testing
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
@@ -42,6 +44,7 @@ jobs:
     needs: [setup, phpstan]
     name: ✅ Run phpunit
     runs-on: ubuntu-latest
+    environment: testing
     services:
       mysql:
         image: mysql:8.0
