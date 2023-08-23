@@ -1,19 +1,19 @@
 on:
   push:
     branches:
-      - "production"
+      - "testing"
 
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
+
+environment:
+  name: production
 
 name: 📜 Test, pack & ship!
 jobs:
   test:
     name: ✅ Run Tests
     runs-on: ubuntu-latest
-
-    environment:
-      name: testing
 
     services:
       mysql:
@@ -55,11 +55,10 @@ jobs:
       - name: ✅ Run php tests
         run: vendor/bin/phpunit
   tagging:
-    name: 🏷️ Tagging the app
     needs: test
+    name: 🏷️ Tagging the app
     runs-on: ubuntu-latest
-    environment:
-      name: stagging
+
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
@@ -76,11 +75,10 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           PRESERVE_VERSION: 5
   build:
-    name: 📦 Build the app
     needs: tagging
+    name: 📦 Build the app
     runs-on: ubuntu-latest
-    environment:
-      name: stagging
+
     steps:
     - name: 🐙 Git checkout
       uses: actions/checkout@v3
@@ -106,11 +104,10 @@ jobs:
         docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
         docker push $IMAGE_ID:$LATEST_TAG
   deploy:
-    name: 🖥️ Upload to server
     needs: build
+    name: 🖥️ Upload to server
     runs-on: ubuntu-latest
-    environment:
-      name: stagging
+
     steps:
     - name: 🐙 Git checkout
       uses: actions/checkout@v3
