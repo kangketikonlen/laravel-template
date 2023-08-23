@@ -4,7 +4,7 @@ on:
       - "stable"
 
 env:
-  IMAGE_NAME: ${{ github.event.repository.name }}
+  image_name: ${{ github.event.repository.name }}
 
 name: 📜 Test, pack & ship!
 jobs:
@@ -75,6 +75,8 @@ jobs:
     needs: tagging
     name: 📦 Build the app
     runs-on: ubuntu-latest
+    outputs:
+      latest_version: ${{steps.push-image.outputs.version}}
 
     steps:
     - name: 🐙 Git checkout
@@ -84,23 +86,22 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: 🐳 Build image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      run: docker build . --file Dockerfile --tag $image_name --label "runnumber=${GITHUB_RUN_ID}"
 
     - name: 🔑 Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: 🛳️ Push image
       run: |
-        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-        LATEST_TAG=$(echo $LATEST_TAG | sed -e 's/^v//')
-        echo IMAGE_ID=$IMAGE_ID
-        echo LATEST_TAG=$LATEST_TAG
-        echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
-        echo "::set-output name=build_tag::$LATEST_TAG"
-        docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
-        docker push $IMAGE_ID:$LATEST_TAG
+        image_id=ghcr.io/${{ github.repository_owner }}/$image_name
+        image_id=$(echo $image_id | tr '[A-Z]' '[a-z]')
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        latest_tag=$(echo $latest_tag | sed -e 's/^v//')
+        echo image_id=$image_id
+        echo latest_tag=$latest_tag
+        echo "version=$latest_tag" >> $GITHUB_OUTPUT
+        docker tag $image_name $image_id:$latest_tag
+        docker push $image_id:$latest_tag
   deploy:
     needs: build
     name: 🖥️ Upload to server
@@ -126,5 +127,5 @@ jobs:
         connect_timeout: 120s
         first_ssh: |
           cd ${{ secrets.DIRECTORY }}
-          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ needs.build.outputs.build_tag }}/g" run.sh
+          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ needs.build.outputs.latest_version }}/g" run.sh
           bash run.sh
