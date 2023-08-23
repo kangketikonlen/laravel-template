@@ -7,18 +7,20 @@ on:
 
 name: 🚀 CI Test Workflow
 jobs:
-  phpstan:
-    name: 🚦 PHPStan analysis
+  setup:
+    name: 🛠️ Set Up
     runs-on: ubuntu-latest
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
-
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
-
       - name: 🛠️ Install dependencies
         run: composer install --no-interaction
-
+  phpstan:
+    needs: setup
+    name: 🚦 PHPStan analysis
+    runs-on: ubuntu-latest
+    steps:
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
