@@ -6,9 +6,6 @@ on:
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
 
-environment:
-  name: production
-
 name: 📜 Test, pack & ship!
 jobs:
   test:
@@ -107,6 +104,9 @@ jobs:
     needs: build
     name: 🖥️ Upload to server
     runs-on: ubuntu-latest
+
+    environment:
+      name: production
 
     steps:
     - name: 🐙 Git checkout
