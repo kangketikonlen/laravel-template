@@ -11,6 +11,8 @@ jobs:
   build:
     name: 📦 Build the app
     runs-on: ubuntu-latest
+    outputs:
+      latest_version: ${{steps.push-image.outputs.version}}
 
     steps:
     - name: 🐙 Git checkout
@@ -19,7 +21,8 @@ jobs:
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
 
-    - name: 🛳️ Push image
+    - id: push-image
+      name: 🛳️ Push image
       run: |
         image_id=ghcr.io/${{ github.repository_owner }}/$image_name
         image_id=$(echo $image_id | tr '[A-Z]' '[a-z]')
@@ -27,7 +30,7 @@ jobs:
         latest_tag=$(echo $latest_tag | sed -e 's/^v//')
         echo image_id=$image_id
         echo latest_tag=$latest_tag
-        echo "latest_version=$latest_tag" >> $GITHUB_OUTPUT
+        echo "version=$latest_tag" >> $GITHUB_OUTPUT
   deploy:
     needs: build
     name: 🖥️ Upload to server
