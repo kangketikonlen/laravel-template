@@ -14,7 +14,7 @@ class RoleSeeder extends Seeder
     {
         $count = 1;
         Role::create([
-            'code' => 'RLS-' . date("ymd") . '-' . str_pad($count, 4, "0", STR_PAD_LEFT),
+            'code' => 'RLS-' . date("ymd") . '-' . str_pad(strval($count), 4, "0", STR_PAD_LEFT),
             'name' => 'support',
             'description' => 'System Support',
             'dashboard_url' => '/dashboard',
@@ -23,7 +23,7 @@ class RoleSeeder extends Seeder
 
         $count += 1;
         Role::create([
-            'code' => 'RLS-' . date("ymd") . '-' . str_pad($count, 4, "0", STR_PAD_LEFT),
+            'code' => 'RLS-' . date("ymd") . '-' . str_pad(strval($count), 4, "0", STR_PAD_LEFT),
             'name' => 'admin',
             'description' => 'Administrator',
             'dashboard_url' => '/dashboard/administration',
@@ -32,7 +32,7 @@ class RoleSeeder extends Seeder
 
         $count += 1;
         Role::create([
-            'code' => 'RLS-' . date("ymd") . '-' . str_pad($count, 4, "0", STR_PAD_LEFT),
+            'code' => 'RLS-' . date("ymd") . '-' . str_pad(strval($count), 4, "0", STR_PAD_LEFT),
             'name' => 'general',
             'description' => 'General Setting',
             'dashboard_url' => '/dashboard/general',

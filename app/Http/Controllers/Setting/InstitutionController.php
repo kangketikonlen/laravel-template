@@ -5,18 +5,20 @@ namespace App\Http\Controllers\Setting;
 use Illuminate\Http\Request;
 use App\Models\System\Institution;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class InstitutionController extends Controller
 {
-    protected $url = "/setting/institution";
+    protected string $url = "/setting/institution";
 
-    public function index()
+    public function index(): View
     {
         $data['institution'] = Institution::first();
         return view('pages.setting.institution.index', $data);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $formFields = $request->validate([
             'name' => 'required',
@@ -29,6 +31,7 @@ class InstitutionController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
+            /** @var \Illuminate\Http\UploadedFile $file */
             $file = $request->file('logo');
             $filename = 'logo-' . date("ymdhis") . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/images/logo/', $filename);
@@ -36,6 +39,7 @@ class InstitutionController extends Controller
         }
 
         if ($request->hasFile('background')) {
+            /** @var \Illuminate\Http\UploadedFile $file */
             $file = $request->file('background');
             $filename = 'background-' . date("ymdhis") . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/images/background/', $filename);
@@ -43,7 +47,7 @@ class InstitutionController extends Controller
         }
 
         $institution = Institution::first();
-        $institution->update($formFields);
+        $institution?->update($formFields);
 
         return redirect($this->url)->with('alert', ['message' => 'Data has been updated!', 'status' => 'warning']);
     }

@@ -35,8 +35,8 @@ class ActivityLogMiddleware
                 $logData['path'] = $path;
             }
 
-            $logData['user'] = Auth::user()->name;
-            $logData['role'] = Auth::user()->roles->name;
+            $logData['user'] = Auth::user()?->name;
+            $logData['role'] = Auth::user()?->roles?->name;
             $logData['description'] = $logData['user'] . " (" . $logData['ipAddress'] . ") telah mendarat di halaman " . $logData['path'];
 
             $activityLog = ActivityLog::where('date', $logData['date'])->where('sessionID', $logData['sessionID'])->where('path', $logData['path'])->first();

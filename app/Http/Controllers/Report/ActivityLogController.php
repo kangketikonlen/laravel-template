@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Report;
 use Illuminate\Http\Request;
 use App\Models\System\ActivityLog;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ActivityLogController extends Controller
 {
-    protected $url = "/report/activity-log";
+    protected string $url = "/report/activity-log";
 
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $activityLogs = ActivityLog::orderBy('id', 'desc');
         $dateStart = $request->input('dateStart');
@@ -25,7 +27,7 @@ class ActivityLogController extends Controller
         return view('pages.report.activity-log.index', $data);
     }
 
-    public function clear()
+    public function clear(): RedirectResponse
     {
         ActivityLog::truncate();
         return redirect($this->url)->with('alert', ['message' => 'Data has been deleted!', 'status' => 'danger']);

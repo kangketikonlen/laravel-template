@@ -15,12 +15,12 @@ class ActivityLog extends Model
 
         static::creating(function ($model) {
             $model->createdAt = $model->freshTimestamp();
-            $model->createdBy = auth()->check() ? auth()->user()->name : "System";
+            $model->createdBy = auth()->check() ? session('name') : "System";
         });
 
         static::updating(function ($model) {
             $model->updatedAt = $model->freshTimestamp();
-            $model->updatedBy = auth()->check() ? auth()->user()->name : "System";
+            $model->updatedBy = auth()->check() ? session('name') : "System";
         });
     }
 }
