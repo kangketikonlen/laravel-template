@@ -36,6 +36,6 @@ jobs:
         with:
           name: vendor
       - name: 📦 Extract vendor archive
-        run: tar -xvzf vendor.tar.gz -C vendor
+        run: ls -al
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
