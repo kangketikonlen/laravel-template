@@ -72,7 +72,7 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           PRESERVE_VERSION: 5
   build:
-    needs: tagging
+    needs: [test, tagging]
     name: 📦 Build the app
     runs-on: ubuntu-latest
     outputs:
@@ -104,12 +104,10 @@ jobs:
         docker tag $image_name $image_id:$latest_tag
         docker push $image_id:$latest_tag
   deploy:
-    needs: build
+    needs: [test, tagging, build]
     name: 🖥️ Upload to server
     runs-on: ubuntu-latest
-
-    environment:
-      name: production
+    environment: production
 
     steps:
     - name: 🐙 Git checkout
@@ -124,9 +122,28 @@ jobs:
         host: ${{ secrets.SERVER }}
         user: ${{ secrets.USERNAME }}
         pass: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
+        port: ${{ secrets.SSH_PORT }}
         connect_timeout: 120s
         first_ssh: |
           cd ${{ secrets.DIRECTORY }}
           sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ needs.build.outputs.latest_version }}/g" run.sh
           bash run.sh
+  check-server:
+    needs: deploy
+    name: 🌐 Check Server Status
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: 🛎️ Check Server Status
+        run: |
+          server_ip=${{ secrets.SERVER }}
+          server_port=${{ secrets.WEB_PORT }}
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://$server_ip:$server_port)
+
+          if [[ "$response" -eq 200 ]]; then
+            echo "Server is up and running!"
+          else
+            echo "Server is not responding."
+            exit 1
+          fi
