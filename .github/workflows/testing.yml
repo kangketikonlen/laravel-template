@@ -6,10 +6,12 @@ on:
 env:
   image_name: ${{ github.event.repository.name }}
 
+name: 📜 Test, pack & ship!
 jobs:
   test:
     name: ✅ Run Tests
     runs-on: ubuntu-latest
+    environment: production
 
     services:
       mysql:
@@ -22,42 +24,48 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
 
-      - name: Set up PHP
+      - name: 📁 Make sure repository is latest
+        run: git fetch --prune --unshallow
+
+      - name: 📑 Set up php
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
 
-      - name: Install Dependencies
+      - name: ⏳ Install dependencies
         run: composer install --no-interaction
 
-      - name: Copy Environment
+      - name: 📄 Create environment
         run: cp .env.example .env
 
-      - name: Generate App Key
+      - name: 🔑 Generate app key
         run: php artisan key:generate
 
-      - name: Set Up Database
+      - name: 💽 Set up database
         run: php artisan migrate --seed --env=testing
 
-      - name: Check Routes
+      - name: 🗺️ Check routes
         run: php artisan route:clear && php artisan route:list
 
-      - name: Run PHP Tests
+      - name: ✅ Run php tests
         run: vendor/bin/phpunit
-
   tagging:
     needs: test
     name: 🏷️ Tagging the app
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
 
-      - name: Create Tag
+      - name: 📁 Make sure repository is latest
+        run: git fetch --prune --unshallow
+
+      - name: 🔖 Create tag
         uses: kangketikonlen/base-tagging@main
         env:
           REPO_NAME: ${{ github.event.repository.name }}
@@ -65,66 +73,72 @@ jobs:
           REPO_OWNER: ${{ github.event.repository.owner.name }}
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           PRESERVE_VERSION: 5
-
   build:
     needs: [test, tagging]
     name: 📦 Build the app
     runs-on: ubuntu-latest
+    environment: production
     outputs:
-      latest_version: ${{ steps.push-image.outputs.version }}
+      latest_version: ${{steps.push-image.outputs.version}}
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+    - name: 🐙 Git checkout
+      uses: actions/checkout@v3
 
-      - name: Build Docker Image
-        run: |
-          docker build . --file Dockerfile --tag $image_name --label "runnumber=${GITHUB_RUN_ID}"
-          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) | sed -e 's/^v//')
-          echo "version=$latest_tag" >> $GITHUB_ENV
+    - name: 📁 Make sure repository is latest
+      run: git fetch --prune --unshallow
 
-      - name: Log in to Docker Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: 🐳 Build image
+      run: docker build . --file Dockerfile --tag $image_name --label "runnumber=${GITHUB_RUN_ID}"
 
-      - name: Push Docker Image
-        run: |
-          image_id=ghcr.io/${{ github.repository_owner }}/$image_name
-          image_id=$(echo $image_id | tr '[A-Z]' '[a-z]')
-          latest_tag=${{ steps.push-image.outputs.version }}
-          echo image_id=$image_id
-          echo latest_tag=$latest_tag
-          docker tag $image_name $image_id:$latest_tag
-          docker push $image_id:$latest_tag
+    - name: 🔑 Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+    - id: push-image
+      name: 🛳️ Push image
+      run: |
+        image_id=ghcr.io/${{ github.repository_owner }}/$image_name
+        image_id=$(echo $image_id | tr '[A-Z]' '[a-z]')
+        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        latest_tag=$(echo $latest_tag | sed -e 's/^v//')
+        echo image_id=$image_id
+        echo latest_tag=$latest_tag
+        echo "version=$latest_tag" >> $GITHUB_OUTPUT
+        docker tag $image_name $image_id:$latest_tag
+        docker push $image_id:$latest_tag
   deploy:
     needs: [test, tagging, build]
     name: 🖥️ Upload to server
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+    - name: 🐙 Git checkout
+      uses: actions/checkout@v3
 
-      - name: Update Server
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        with:
-          host: ${{ secrets.SERVER }}
-          user: ${{ secrets.USERNAME }}
-          pass: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          connect_timeout: 120s
-          first_ssh: |
-            cd ${{ secrets.DIRECTORY }}
-            sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ needs.build.outputs.latest_version }}/g" run.sh
-            bash run.sh
+    - name: 📁 Make sure repository is latest
+      run: git fetch --prune --unshallow
 
+    - name: 🚀 Update server
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      with:
+        host: ${{ secrets.SERVER }}
+        user: ${{ secrets.USERNAME }}
+        pass: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        connect_timeout: 120s
+        first_ssh: |
+          cd ${{ secrets.DIRECTORY }}
+          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ needs.build.outputs.latest_version }}/g" run.sh
+          bash run.sh
   check-server:
     needs: deploy
     name: 🌐 Check Server Status
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
-      - name: Check Server Status
+      - name: 🛎️ Check Server Status
         run: |
           server_ip=${{ secrets.SERVER }}
           server_port=${{ secrets.WEB_PORT }}
