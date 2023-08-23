@@ -4,7 +4,7 @@ on:
       - "*"
       - "!main"
       - "!stable"
-      - "!v*"
+      - "!version"
 
 name: 📜 Tests App
 jobs:
