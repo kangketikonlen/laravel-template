@@ -11,6 +11,8 @@ jobs:
     name: 🛠️ Set Up
     runs-on: ubuntu-latest
     steps:
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
       - name: 🛠️ Install dependencies
@@ -18,7 +20,7 @@ jobs:
       - name: 📦 Create vendor archive
         run: zip -r vendor.zip vendor
       - name: 📦 Upload vendor folder
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: vendor
           path: vendor.zip
@@ -28,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📦 Download vendor folder
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: vendor
       - name: 📦 Extract vendor archive
@@ -50,13 +52,13 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: 📦 Download vendor folder
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: vendor
       - name: 📦 Extract vendor archive
         run: unzip vendor.zip
       - name: 📑 Set up php
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v3
         with:
           php-version: 8.1
       - name: 📄 Create environment
