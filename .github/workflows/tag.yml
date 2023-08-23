@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "v*"
+      - "version"
 
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
