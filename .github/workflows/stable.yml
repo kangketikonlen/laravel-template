@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "stable"
+      - "testing"
 
 env:
   IMAGE_NAME: ${{ github.event.repository.name }}
@@ -14,9 +14,42 @@ jobs:
     environment:
       name: stagging
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testing
+          MYSQL_DATABASE: larapulse
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
     - name: 🐙 Git checkout
       uses: actions/checkout@v3
+
+    - name: 📑 Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+
+    - name: ⏳ Install dependencies
+      run: composer install --no-interaction
+
+    - name: 📄 Create environment
+      run: cp .env.example .env
+
+    - name: 🔑 Generate app key
+      run: php artisan key:generate
+
+    - name: 💽 Set up database
+      run: php artisan migrate --seed --env=testing
+
+    - name: 🗺️ Check routes
+      run: php artisan route:clear && php artisan route:list
+
+    - name: ✅ Run tests
+      run: vendor/bin/phpunit
 
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
@@ -38,3 +71,16 @@ jobs:
         echo "NEW_TAG=$LATEST_TAG" >> $GITHUB_ENV
         docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
         docker push $IMAGE_ID:$LATEST_TAG
+
+    - name: 🚀 Update server
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      with:
+        host: ${{ secrets.SERVER }}
+        user: ${{ secrets.USERNAME }}
+        pass: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        connect_timeout: 120s
+        first_ssh: |
+          cd ${{ secrets.DIRECTORY }}
+          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ env.NEW_TAG }}/g" run.sh
+          bash run.sh
