@@ -11,6 +11,16 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testing
+          MYSQL_DATABASE: larapulse
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -28,6 +38,9 @@ jobs:
 
       - name: Generate app key
         run: php artisan key:generate
+
+      - name: Set up database
+        run: php artisan migrate --seed --env=testing
 
       - name: Run tests
         run: vendor/bin/phpunit
