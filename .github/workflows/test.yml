@@ -36,6 +36,6 @@ jobs:
         with:
           name: vendor
       - name: 📦 Extract vendor archive
-        run: unzip -o vendor.zip -d vendor
+        run: unzip vendor.zip
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
