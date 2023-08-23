@@ -37,6 +37,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: 🐙 Git checkout
+      uses: actions/checkout@v3
+
+    - name: 📁 Make sure repository is latest
+      run: git fetch --prune --unshallow
+
     - name: Get NEW_TAG output from build job
       run: |
         echo "Deploying using tag: ${{ needs.build.outputs.latest_version }}"
