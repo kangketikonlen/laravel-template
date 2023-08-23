@@ -55,6 +55,7 @@ jobs:
       - name: ✅ Run php tests
         run: vendor/bin/phpunit
   tagging:
+    needs: test
     runs-on: ubuntu-latest
     environment:
       name: stagging
@@ -74,6 +75,7 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           PRESERVE_VERSION: 5
   build:
+    needs: tagging
     runs-on: ubuntu-latest
     environment:
       name: stagging
@@ -102,6 +104,7 @@ jobs:
         docker tag $IMAGE_NAME $IMAGE_ID:$LATEST_TAG
         docker push $IMAGE_ID:$LATEST_TAG
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: stagging
