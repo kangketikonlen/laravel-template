@@ -17,6 +17,11 @@ jobs:
         run: git fetch --prune --unshallow
       - name: 🛠️ Install dependencies
         run: composer install --no-interaction
+      - name: 📦 Upload vendor folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: vendor
+          path: vendor
   phpstan:
     needs: setup
     name: 🚦 PHPStan analysis
@@ -24,5 +29,9 @@ jobs:
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
+      - name: 📦 Download vendor folder
+        uses: actions/download-artifact@v2
+          with:
+            name: vendor
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
