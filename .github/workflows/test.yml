@@ -5,14 +5,20 @@ on:
       - "!main"
       - "!stable"
 
-env:
-  image_name: ${{ github.event.repository.name }}
-
 name: 🚀 CI Test Workflow
 jobs:
   setup:
     name: 🛠️ Set Up
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testing
+          MYSQL_DATABASE: larapulse
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v3
