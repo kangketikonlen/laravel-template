@@ -16,6 +16,7 @@ name=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
 cat > .env <<EOF
 APP_NAME=${name}
 APP_ENV=production
+APP_URL=https://larapulse.kangketik.online
 APP_DEBUG=false
 
 LOG_CHANNEL=stack
