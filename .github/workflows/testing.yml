@@ -17,8 +17,8 @@ jobs:
     - name: ▶️ Running shell script
       run: |
         cd .docker/server
-        bash bin/create.sh
-        bash bin/generate.sh
+        bash bin/create-storage.sh
+        bash bin/generate-env.sh
     - name: 🚀 Update server
       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
       with:
