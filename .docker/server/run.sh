@@ -1,7 +1,16 @@
 #!/bin/bash
 
 IMAGE_VERSION=1.0
-sed -i "" "s/^\(DOCKER_IMAGE_VERSION=\).*/\1$IMAGE_VERSION/" .env
+OS=$(uname)
+
+if [[ "$OS" == "Linux" ]]; then
+    sed -i "s/^\(DOCKER_IMAGE_VERSION=\).*/\1$IMAGE_VERSION/" .env
+elif [[ "$OS" == "Darwin" ]]; then
+    sed -i "" "s/^\(DOCKER_IMAGE_VERSION=\).*/\1$IMAGE_VERSION/" .env
+else
+    echo "Unsupported operating system: $OS"
+    exit 1
+fi
 
 # Source existing .env
 . .env

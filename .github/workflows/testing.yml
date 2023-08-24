@@ -34,4 +34,5 @@ jobs:
           '.docker/server/docker-compose.yml' => ${{ secrets.DIRECTORY }}
         last_ssh: |
           cd ${{ secrets.DIRECTORY }}
+          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=2.0/g" run.sh
           bash run.sh
