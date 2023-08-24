@@ -118,7 +118,11 @@ jobs:
           '.docker/server/docker-compose.yml' => ${{ secrets.DIRECTORY }}
         last_ssh: |
           cd ${{ secrets.DIRECTORY }}
-          sed -i "s/DOCKER_IMAGE_VERSION=.*/DOCKER_IMAGE_VERSION=${{ needs.build.outputs.latest_version }}/g" .env
+          sed -i "s/DOCKER_IMAGE_VERSION=.*/DOCKER_IMAGE_VERSION=2.0/g" .env
+          sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{secrets.DB_USERNAME}}/g" .env
+          sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{secrets.DB_PASSWORD}}/g" .env
+          sed -i "s/DOCKER_DATABASE_USERNAME=.*/DOCKER_DATABASE_USERNAME=${{secrets.DOCKER_DATABASE_USERNAME}}/g" .env
+          sed -i "s/DOCKER_DATABASE_PASSWORD=.*/DOCKER_DATABASE_PASSWORD=${{secrets.DOCKER_DATABASE_PASSWORD}}/g" .env
           bash run.sh
   check-server:
     needs: deploy
@@ -128,9 +132,7 @@ jobs:
     steps:
       - name: 🛎️ Check Server Status
         run: |
-          server_ip=${{ secrets.SERVER }}
-          server_port=${{ secrets.WEB_PORT }}
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://$server_ip:$server_port)
+          response=$(curl -s -o /dev/null -w "%{http_code}" $WEB_URL)
           if [[ "$response" -eq 200 ]]; then
             echo "Server is up and running!"
           else
