@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Running some script
-bash ./bin/create-storage.sh
-bash ./bin/generate-env.sh
-
 IMAGE_VERSION=1.0
 sed -i "" "s/^\(DOCKER_IMAGE_VERSION=\).*/\1$IMAGE_VERSION/" .env
 
