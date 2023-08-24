@@ -70,11 +70,6 @@ RUN composer install --no-scripts --no-autoloader --ansi --no-interaction \
 RUN npm install --silent --no-optional \
     && npm run production
 
-# Create required folder on storage
-RUN mkdir -p /var/www/app/storage/app
-RUN mkdir -p /var/www/app/storage/app/public
-RUN mkdir -p /var/www/app/storage/app/public/images
-
 # Create laravel log file.
 RUN touch /var/www/app/storage/logs/laravel.log
 RUN chmod -R 0777 /var/www/app/storage/logs
