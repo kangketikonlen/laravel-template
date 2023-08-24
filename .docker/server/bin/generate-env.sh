@@ -12,11 +12,6 @@ fi
 # Creating variables
 name=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
 
-# Generate a random 8-character alphanumeric string
-generate_random_string() {
-    openssl rand -base64 6 | tr -d "=+/"; echo
-}
-
 # Create a new .env file
 cat > .env <<EOF
 APP_NAME=${name}
@@ -30,8 +25,8 @@ DB_CONNECTION=mysql
 DB_HOST=${name}-database
 DB_PORT=3306
 DB_DATABASE=${name}
-DB_USERNAME=$(generate_random_string)
-DB_PASSWORD=$(generate_random_string)
+DB_USERNAME=
+DB_PASSWORD=
 
 BROADCAST_DRIVER=log
 CACHE_DRIVER=file
@@ -45,8 +40,8 @@ DOCKER_DBMS_PORT=1004
 DOCKER_DATABASE_PORT=3304
 DOCKER_DATABASE_HOST=${name}-database
 DOCKER_DATABASE_NAME=${name}
-DOCKER_DATABASE_USERNAME=${name}-$(generate_random_string)
-DOCKER_DATABASE_PASSWORD=$(generate_random_string)
+DOCKER_DATABASE_USERNAME=
+DOCKER_DATABASE_PASSWORD=
 DOCKER_IMAGE_VERSION=0.1
 TZ=Asia/Jakarta
 EOF
