@@ -132,7 +132,7 @@ jobs:
     steps:
       - name: 🛎️ Check Server Status
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" $WEB_URL)
+          response=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.WEB_URL }})
           if [[ "$response" -eq 200 ]]; then
             echo "Server is up and running!"
           else
