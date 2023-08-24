@@ -24,9 +24,8 @@ jobs:
         connect_timeout: 120s
         scp: |
           '.docker/server/bin' => ${{ secrets.DIRECTORY }}
+          '.docker/server/docker-compose.yml' => ${{ secrets.DIRECTORY }}
+          '.docker/server/run.sh' => ${{ secrets.DIRECTORY }}
         last_ssh: |
           cd ${{ secrets.DIRECTORY }}
-          bash bin/create-storage.sh
-          bash bin/generate-env.sh
-          sed -i "s/IMAGE_VERSION=.*/IMAGE_VERSION=${{ needs.build.outputs.latest_version }}/g" run.sh
           bash run.sh
