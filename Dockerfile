@@ -113,7 +113,9 @@ RUN rm -rf .git \
     && rm -rf phpunit.xml \
     && rm -rf README.md \
     && rm -rf webpack.mix.js \
-    && rm -rf api
+    && rm -rf api \
+    && rm -rf *.md \
+    && rm -rf phpstan.neon
 
 EXPOSE 80
 
