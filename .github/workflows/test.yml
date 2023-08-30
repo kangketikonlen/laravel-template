@@ -56,7 +56,7 @@ jobs:
       - name: 💽 Running database migrate
         run: php artisan migrate --env=testing
       - name: 🌱 Run database seeder
-        run: php artisan db:seed --class='Database\Seeders\TestingSeeder' --env=testing
+        run: php artisan db:seed --env=testing
       - name: 🗺️ Check routes
         run: php artisan route:clear && php artisan route:list
       - name: ✅ Run php tests
