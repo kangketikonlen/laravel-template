@@ -23,21 +23,6 @@ jobs:
         with:
           name: vendor
           path: vendor.zip
-  phpstan:
-    needs: setup
-    name: 🚦 PHPStan analysis
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🐙 Git checkout
-        uses: actions/checkout@v3
-      - name: 📦 Download vendor folder
-        uses: actions/download-artifact@v3
-        with:
-          name: vendor
-      - name: 📦 Extract vendor archive
-        run: unzip vendor.zip
-      - name: 🚦 Analyze with PHPStan
-        run: composer phpstan
   phpunit:
     needs: setup
     name: ✅ Run phpunit
@@ -76,6 +61,21 @@ jobs:
         run: php artisan route:clear && php artisan route:list
       - name: ✅ Run php tests
         run: vendor/bin/phpunit
+  phpstan:
+    needs: setup
+    name: 🚦 PHPStan analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐙 Git checkout
+        uses: actions/checkout@v3
+      - name: 📦 Download vendor folder
+        uses: actions/download-artifact@v3
+        with:
+          name: vendor
+      - name: 📦 Extract vendor archive
+        run: unzip vendor.zip
+      - name: 🚦 Analyze with PHPStan
+        run: composer phpstan
   tagging:
     needs: [setup, phpstan, phpunit]
     name: 🏷️ Tagging the app
