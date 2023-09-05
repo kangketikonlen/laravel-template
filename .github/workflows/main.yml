@@ -15,7 +15,7 @@ jobs:
       latest_version: ${{steps.push-image.outputs.version}}
     steps:
     - name: 🐙 Git checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
     - name: 🐳 Build image
@@ -41,7 +41,7 @@ jobs:
     environment: production
     steps:
     - name: 🐙 Git checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: 📁 Make sure repository is latest
       run: git fetch --prune --unshallow
     - name: ▶️ Running shell script
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐙 Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
       - name: 🔖 Create tag
