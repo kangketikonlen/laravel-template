@@ -130,7 +130,7 @@ jobs:
           # If a pull request exists, exit the workflow
           if [[ "$EXISTING_PR" == null ]]; then
             # Get the current date and time in the specified format
-            CURRENT_DATE=$(date +'%d-%m-%Y %H:%M')
+            CURRENT_DATE=$(TZ='Asia/Jakarta' date +'%d-%m-%Y %H:%M')
 
             # Create a pull request with date and time in the title
             PR_TITLE="[$CURRENT_DATE] $CURRENT_BRANCH - Request merge $CURRENT_BRANCH to main branch"
