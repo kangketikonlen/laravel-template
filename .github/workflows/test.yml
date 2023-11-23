@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐙 Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
       - name: 🛠️ Install dependencies
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐙 Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 📦 Download vendor folder
         uses: actions/download-artifact@v3
         with:
@@ -53,7 +53,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: 🐙 Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 📦 Download vendor folder
         uses: actions/download-artifact@v3
         with:
@@ -82,7 +82,7 @@ jobs:
     needs: [setup, phpstan, phpunit]
     steps:
       - name: 🐙 Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 📦 Delete vendor artifact
         uses: geekyeggo/delete-artifact@v2
         with:
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐙 Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 📁 Make sure repository is latest
         run: git fetch --prune --unshallow
       - name: 🔖 Create tag
@@ -111,7 +111,7 @@ jobs:
     environment: testing
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🚀 Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
       - name: 🚀 Create PR
