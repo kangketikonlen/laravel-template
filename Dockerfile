@@ -49,6 +49,10 @@ COPY .docker/conf/default.conf /etc/nginx/http.d/default.conf
 RUN composer install --no-dev --no-scripts --no-autoloader --ansi --no-interaction \
     && composer dump-autoload -o
 
+# install nodejs dependencies
+RUN npm install --silent --no-optional \
+    && npm run production
+
 # Create laravel log file.
 RUN touch /var/www/app/storage/logs/laravel.log
 RUN chmod -R 0777 /var/www/app/storage/logs
@@ -77,6 +81,7 @@ RUN rm -rf resources/css \
     && rm -rf resources/json \
     && rm -rf resources/lang \
     && rm -rf resources/sass \
+    && rm -rf resources/plugin \
     && rm -rf resources/favicon.ico
 
 RUN rm -rf .git \
@@ -94,7 +99,8 @@ RUN rm -rf .git \
     && rm -rf webpack.mix.js \
     && rm -rf api \
     && rm -rf *.md \
-    && rm -rf phpstan.neon
+    && rm -rf phpstan.neon \
+    && rm -rf node_modules
 
 EXPOSE 80
 
