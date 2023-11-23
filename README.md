@@ -15,8 +15,35 @@ Build applications that suit your project's unique needs while maintaining Larav
 Fine-tuned performance enhancements to ensure your application runs smoothly and efficiently.
 
 ## Getting Started
+### For Contributors
 Follow these steps to get started with Larapulse:
-1. Clone this repository: `git clone https://github.com/yourusername/larapulse.git`
-2. Install project dependencies: `composer install`
-3. Copy the example environment file and configure your environment settings: `cp .env.example .env`
-4. Generate an application key: `php artisan key:generate`
+```bash
+git clone git@github.com:kangketikonlen/larapulse.git
+composer install && npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate:fresh --seed
+php artisan serve
+```
+### For Auto Deployment
+Follow these steps to get started with Larapulse:
+- Fork or copy this repository to your account. You will see a failed github actions because the secret environment is not set yet.
+- Login to your server, navigate to your desired directory, and create a new folder named **larapulse**.
+- Go to the Repository Setting > Actions > General. Search **Workflow Permission** and set to Read and write permission.
+- On the same page, go to Secrets and Variables > Actions. Then, create a new repository secret with the following:
+
+| Name                      | Secret                      |
+| ------------------------- | --------------------------- |
+| SERVER                    | YOUR SERVER IP              |
+| USERNAME                  | YOUR SERVER USERNAME        |
+| PASSWORD                  | YOUR SERVER PASSWORD        |
+| SSH_PORT                  | YOUR SERVER SSH PORT        |
+| DIRECTORY                 | YOUR LARAPULSE DIRECTORY    |
+| DB_USERNAME               | YOUR DATABASE USERNAME      |
+| DB_PASSWORD               | YOUR DATABASE PASSWORD      |
+| DOCKER_DATABASE_USERNAME  | YOUR DATABASE USERNAME      |
+| DOCKER_DATABASE_PASSWORD  | YOUR DATABASE PASSWORD      |
+| WEB_URL                   | YOUR LARAPULSE URL          |
+- Create new first tag `v0.1`
+- Make sure there is no running actions on action page then, re run the first failed action.
+If you face some problem, feel free to open an issue.
