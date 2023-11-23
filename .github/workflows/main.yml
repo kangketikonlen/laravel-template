@@ -70,13 +70,6 @@ jobs:
           sed -i "s/DOCKER_DATABASE_USERNAME=.*/DOCKER_DATABASE_USERNAME=${{secrets.DOCKER_DATABASE_USERNAME}}/g" .env
           sed -i "s/DOCKER_DATABASE_PASSWORD=.*/DOCKER_DATABASE_PASSWORD=${{secrets.DOCKER_DATABASE_PASSWORD}}/g" .env
           bash run.sh
-    - name: 🛎️ Check Server Status
-      run: |
-        if curl -I "${{ secrets.WEB_URL }}" 2>&1 | grep -w "200\|301" ; then
-          echo "website is up"
-        else
-          echo "website is down"
-        fi
   tagging:
     needs: [build, deploy]
     name: 🏷️ Tagging the app
