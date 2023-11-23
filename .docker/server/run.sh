@@ -5,10 +5,6 @@
 
 remove_and_run() {
     trap 'echo "Exiting function with status 1..."; exit 1' INT TERM
-    docker rm -f ${APP_NAME}-app
-    docker system prune -f
-    docker volume prune -f
-    docker image prune -a -f
     docker-compose up -d || exit 1
 
     echo -e "\nRunning clear config..."
@@ -41,6 +37,10 @@ remove_and_run() {
         echo "website is down"
         exit 1
     fi
+
+    docker system prune -f
+    docker volume prune -f
+    docker image prune -a -f
 }
 
 if command -v docker-compose >/dev/null 2>&1; then
