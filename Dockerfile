@@ -43,15 +43,11 @@ RUN dos2unix /usr/local/bin/docker-php-entrypoint
 
 # copy nginx configuration
 COPY .docker/conf/nginx.conf /etc/nginx/nginx.conf
-COPY .docker/conf/default.conf /etc/nginx/sites-available/default
+COPY .docker/conf/default.conf /etc/nginx/http.d/default.conf
 
 # install composer dependencies
 RUN composer install --no-dev --no-scripts --no-autoloader --ansi --no-interaction \
     && composer dump-autoload -o
-
-# install nodejs dependencies
-RUN npm install --silent --no-optional \
-    && npm run production
 
 # Create laravel log file.
 RUN touch /var/www/app/storage/logs/laravel.log
@@ -60,7 +56,7 @@ RUN chmod -R 0777 /var/www/app/storage/logs
 # setup ownership
 RUN chmod -R 777 /var/www/app/storage \
     && chmod -R 777 /var/www/app/bootstrap/cache \
-    && chown -R :www-data /var/www/app
+    && chown -R :nginx /var/www/app
 
 # Setup docker cronjobs
 COPY .docker/docker-php-schedule /etc/cron.d/laravel-cron
