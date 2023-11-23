@@ -1,26 +1,9 @@
-FROM ghcr.io/kangketikonlen/base-engine:1.2
+FROM ghcr.io/kangketikonlen/alpine-engine:latest
 
 WORKDIR /var/www/app
 
 # copy application code
 COPY . ./
-
-# set composer related environment variables
-ENV PATH="/composer/vendor/bin:$PATH" \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    COMPOSER_VENDOR_DIR=/var/www/app/vendor \
-    COMPOSER_HOME=/composer
-
-# update the repository
-RUN apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
-    && apt install iputils-ping -y \
-    && apt install mysql-client -y
-
-# install composer
-RUN curl -sS https://getcomposer.org/installer | \
-    php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer --ansi --version --no-interaction --no-dev
 
 # add custom php-fpm pool settings, these get written at entrypoint startup
 ENV FPM_PM_MAX_CHILDREN=73 \
@@ -63,7 +46,7 @@ COPY .docker/conf/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/conf/default.conf /etc/nginx/sites-available/default
 
 # install composer dependencies
-RUN composer install --no-scripts --no-autoloader --ansi --no-interaction \
+RUN composer install --no-dev --no-scripts --no-autoloader --ansi --no-interaction \
     && composer dump-autoload -o
 
 # install nodejs dependencies
