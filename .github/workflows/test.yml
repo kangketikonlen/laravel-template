@@ -6,40 +6,17 @@ on:
 
 name: 🔥 Test Workflow
 jobs:
-  setup:
-    name: 🛠️ Set Up
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🐙 Git checkout
-        uses: actions/checkout@v4
-      - name: 📁 Make sure repository is latest
-        run: git fetch --prune --unshallow
-      - name: 🛠️ Install dependencies
-        run: composer install --no-interaction
-      - name: 📦 Create vendor archive
-        run: zip -r vendor.zip vendor
-      - name: 📦 Upload vendor folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: vendor
-          path: vendor.zip
   phpstan:
-    needs: setup
     name: 🚦 PHPStan analysis
     runs-on: ubuntu-latest
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v4
-      - name: 📦 Download vendor folder
-        uses: actions/download-artifact@v4
-        with:
-          name: vendor
-      - name: 📦 Extract vendor archive
-        run: unzip vendor.zip
+      - name: 🛠️ Install dependencies
+        run: composer install --no-interaction
       - name: 🚦 Analyze with PHPStan
         run: composer phpstan
   phpunit:
-    needs: setup
     name: ✅ Run phpunit
     runs-on: ubuntu-latest
     services:
@@ -54,12 +31,8 @@ jobs:
     steps:
       - name: 🐙 Git checkout
         uses: actions/checkout@v4
-      - name: 📦 Download vendor folder
-        uses: actions/download-artifact@v4
-        with:
-          name: vendor
-      - name: 📦 Extract vendor archive
-        run: unzip vendor.zip
+      - name: 🛠️ Install dependencies
+        run: composer install --no-interaction
       - name: 📑 Set up php
         uses: shivammathur/setup-php@v2
         with:
@@ -76,19 +49,8 @@ jobs:
         run: php artisan route:clear && php artisan route:list
       - name: ✅ Run php tests
         run: vendor/bin/phpunit
-  cleanup:
-    name: 🧹 Cleaning up artifact
-    runs-on: ubuntu-latest
-    needs: [setup, phpstan, phpunit]
-    steps:
-      - name: 🐙 Git checkout
-        uses: actions/checkout@v4
-      - name: 📦 Delete vendor artifact
-        uses: geekyeggo/delete-artifact@v4
-        with:
-          name: vendor
   tagging:
-    needs: [setup, phpstan, phpunit]
+    needs: [phpstan, phpunit]
     name: 🏷️ Tagging the app
     runs-on: ubuntu-latest
     steps:
@@ -105,7 +67,7 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           PRESERVE_VERSION: 5
   create-pr:
-    needs: [setup, phpstan, phpunit, cleanup, tagging]
+    needs: [phpstan, phpunit, tagging]
     name: 🔄 Create Pull Request
     runs-on: ubuntu-latest
     environment: testing
