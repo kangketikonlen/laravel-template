@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->char('icon', 50);
             $table->string('description');
             $table->string('url');
-            $table->char('role_name', 50);
+            $table->string('navbars');
+            $table->string('subnavbars');
+            $table->string('roles');
+            $table->string('role_code');
             $table->string('createdBy')->default('System');
             $table->timestamp('createdAt')->default(now());
             $table->string('updatedBy')->nullable(true)->default(null);

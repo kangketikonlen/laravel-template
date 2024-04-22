@@ -28,6 +28,7 @@ class PortalController extends Controller
         if (auth()->attempt($formFields)) {
             $request->session()->regenerate();
             $user = auth()->user();
+
             // Create session
             $session = array(
                 'id' => $user?->id,
@@ -39,6 +40,7 @@ class PortalController extends Controller
                 'role_url' => $user?->roles?->dashboard_url,
                 'role_page' => $user?->roles?->is_landing
             );
+
             Session::put($session);
             return redirect('/')->with('message', 'Anda berhasil login!');
         }
