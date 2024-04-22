@@ -20,8 +20,7 @@
                     <!-- Top Buttons Start -->
                     <div class="col-12 col-sm-6 d-flex align-items-start justify-content-end">
                         <!-- Tour Button Start -->
-                        <a href="/dashboard/reset-role"
-                            class="btn btn-outline-primary btn-icon btn-icon-end w-100 w-sm-auto">
+                        <a href="/dashboard/reset" class="btn btn-outline-primary btn-icon btn-icon-end w-100 w-sm-auto">
                             <!-- <span>Menu Utama</span> -->
                             <i data-acorn-icon="home"></i>
                         </a>

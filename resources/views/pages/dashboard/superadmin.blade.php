@@ -19,23 +19,16 @@
     <div class="container">
         @include('_layout/breadcrumb')
         <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="nav justify-content-start row">
-                            @foreach ($modules as $module)
-                                <li class="nav-item col-2">
-                                    <a class="nav-link d-flex flex-column align-items-center" href="{{ $module->url }}">
-                                        <span class="d-inline-block bg-primary rounded p-3">
-                                            <i class="fa fa-2x {{ $module->icon }} order-1 text-white"></i>
-                                        </span>
-                                        <span class="order-2 my-2">
-                                            <span class="fw-bold d-block">{{ $module->description }}</span>
-                                        </span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
+            <div class="col-4">
+                @include('pages.dashboard.components.profile')
+            </div>
+            <div class="col-8">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-12">
+                        @include('pages.dashboard.components.main-module')
+                    </div>
+                    <div class="col-12">
+                        @include('pages.dashboard.components.additional-module')
                     </div>
                 </div>
             </div>
