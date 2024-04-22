@@ -1,6 +1,6 @@
 @php
     $html_tag_data = [];
-    $title = 'General Setting Dashboard';
+    $title = 'Dashboard ' . session('module_name');
     $description = 'Dashboard';
     $breadcrumbs = ['/' => 'Home'];
 @endphp
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h4 class="fw-bold">Hi, {{ session()->get('name') }}</h4>
                 <p class="m-0">
-                    Selamat datang di dashboard {{ session()->get('role_description') }}.
+                    Selamat datang di dashboard {{ session('module_name') }}.
                 </p>
             </div>
         </div>

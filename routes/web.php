@@ -29,11 +29,11 @@ Route::namespace('Profile')->prefix('profile')->middleware('auth:web')->group(fu
 
 Route::namespace('Dashboard')->prefix('dashboard')->middleware('auth:web')->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/task', [DashboardController::class, 'task']);
     Route::get('/administrator', [DashboardController::class, 'administrator']);
-    Route::get('/general', [DashboardController::class, 'general']);
     // ========================== //
-    Route::get('/switch-role', [DashboardController::class, 'switch_role']);
-    Route::get('/reset-role', [DashboardController::class, 'reset_role']);
+    Route::get('/switch', [DashboardController::class, 'switch']);
+    Route::get('/reset', [DashboardController::class, 'reset']);
     Route::get('/logout', [PortalController::class, 'logout']);
 });
 
