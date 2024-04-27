@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,13 +26,9 @@ class UserController extends Controller
         return view('pages.master.user.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $formFields = $request->validate([
-            'name' => 'required',
-            'username' => 'required',
-            'password' => 'required'
-        ]);
+        $formFields = $request->validated();
 
         $formFields['role_id'] = 2;
         $formFields['password'] = bcrypt($formFields['password']);
@@ -45,12 +43,9 @@ class UserController extends Controller
         return view('pages.master.user.edit', $data);
     }
 
-    public function update(User $user, Request $request): RedirectResponse
+    public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
-        $formFields = $request->validate([
-            'name' => 'required',
-            'username' => 'required'
-        ]);
+        $formFields = $request->validated();
 
         $user->update($formFields);
 
