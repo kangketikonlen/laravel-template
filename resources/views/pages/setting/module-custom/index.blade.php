@@ -1,8 +1,8 @@
 @php
     $html_tag_data = [];
-    $title = 'Data Riwayat Audit';
-    $description = 'View Riwayat Audit';
-    $url = '/report/activity-log';
+    $title = 'Data Module Custom';
+    $description = 'View Module Custom';
+    $url = '/setting/custom-module';
     $breadcrumbs = ['/' => 'Home'];
 @endphp
 @extends('layout-private', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
@@ -30,8 +30,7 @@
             </div>
             <!-- Search End -->
             <div class="col-sm-12 col-md-7 col-lg-9 col-xxl-10 text-end mb-1">
-                <x-buttons.filter />
-                <x-buttons.clear :link="$url" />
+                <x-buttons.create :link="$url" />
             </div>
         </div>
         <!-- Controls End -->
@@ -48,35 +47,34 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col" class="text-nowrap">Tanggal</th>
-                            <th scope="col" class="text-nowrap">Jam</th>
-                            <th scope="col" class="text-nowrap">Alamat IP</th>
-                            <th scope="col" class="text-nowrap">User</th>
-                            <th scope="col" class="text-nowrap">Metode</th>
-                            <th scope="col" class="text-nowrap">Refferer</th>
-                            <th scope="col" class="text-nowrap">Path</th>
-                            <th scope="col" class="text-nowrap text-end">Total Hit</th>
+                            <th scope="col" class="text-nowrap">Nama</th>
+                            <th scope="col" class="text-nowrap">Detail</th>
+                            <th scope="col" class="text-nowrap">Users</th>
+                            <th scope="col" class="text-nowrap text-center">-</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (count($activityLog) == 0)
+                        @if (count($moduleCustoms) == 0)
                             <tr>
                                 <td colspan="8" class="text-center text-muted">Tidak ada data</td>
                             </tr>
                         @else
-                            @foreach ($activityLog as $data)
+                            @foreach ($moduleCustoms as $data)
                                 <tr>
                                     <td class="align-middle">{{ $loop->iteration }}</td>
                                     <td class="align-middle">
-                                        {{ \Carbon\Carbon::parse($data->date)->locale('id')->isoFormat('D MMMM Y') }}
+                                        <i class="fa {{ $data->icon }} pr-2"></i>
+                                        {{ $data->description }}
                                     </td>
-                                    <td class="align-middle">{{ $data->time }}</td>
-                                    <td class="align-middle">{{ $data->ipAddress }}</td>
-                                    <td class="align-middle">{{ $data->user }}</td>
-                                    <td class="align-middle">{{ $data->method }}</td>
-                                    <td class="align-middle">{{ $data->referer }}</td>
-                                    <td class="align-middle">{{ $data->path }}</td>
-                                    <td class="align-middle text-end">{{ number_format($data->totalHit) }}</td>
+                                    <td class="align-middle">{{ $data->url }}</td>
+                                    <td class="align-middle">
+                                        {{ implode(', ', $data->moduleCustomUsers->pluck('user.name')->toArray()) }}
+                                        <x-buttons.add-user :link="$url" :data="$data->id" />
+                                    </td>
+                                    <td class="align-middle text-center text-nowrap">
+                                        <x-buttons.edit :link="$url" :data="$data->id" />
+                                        <x-buttons.delete :link="$url" :data="$data->id" />
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif
@@ -84,10 +82,9 @@
                 </table>
             </div>
             <div class="card-footer pt-2 pb-2">
-                {{ $activityLog->appends(['query' => $query])->links() }}
+                {{ $moduleCustoms->appends(['query' => $query])->links() }}
             </div>
         </div>
         <!-- Item List End -->
     </div>
-    <x-modal.activity-log :link="$url" />
 @endsection

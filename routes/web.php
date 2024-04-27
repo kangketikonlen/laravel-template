@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Setting\InstitutionController;
+use App\Http\Controllers\Setting\ModuleCustomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::namespace('Dashboard')->prefix('dashboard')->middleware('auth:web')->grou
     Route::get('/administrator', [DashboardController::class, 'administrator']);
     // ========================== //
     Route::get('/switch', [DashboardController::class, 'switch']);
+    Route::get('/switch-task', [DashboardController::class, 'switch_task']);
     Route::get('/reset', [DashboardController::class, 'reset']);
     Route::get('/logout', [PortalController::class, 'logout']);
 });
@@ -55,22 +57,21 @@ Route::namespace('Setting')->prefix('setting')->middleware('auth:web')->group(fu
         Route::get('/', [InstitutionController::class, 'index']);
         Route::put('/update', [InstitutionController::class, 'update']);
     });
+    Route::prefix('custom-module')->middleware('auth:web')->group(function () {
+        Route::get('/', [ModuleCustomController::class, 'index']);
+        Route::get('/create', [ModuleCustomController::class, 'create']);
+        Route::post('/store', [ModuleCustomController::class, 'store']);
+        Route::get('/{moduleCustom}/add-user', [ModuleCustomController::class, 'add_user']);
+        Route::put('/{moduleCustom}/store-user', [ModuleCustomController::class, 'store_user']);
+        Route::get('/{moduleCustom}/edit', [ModuleCustomController::class, 'edit']);
+        Route::put('/{moduleCustom}/update', [ModuleCustomController::class, 'update']);
+        Route::delete('/{moduleCustom}/delete', [ModuleCustomController::class, 'delete']);
+    });
 });
 
 Route::namespace('Administration')->prefix('administration')->middleware('auth:web')->group(function () {
     Route::prefix('maintenance')->middleware('auth:web')->group(function () {
         Route::get('/', [MaintenanceController::class, 'index']);
         Route::get('/process', [MaintenanceController::class, 'process']);
-    });
-});
-
-Route::namespace('Report')->prefix('report')->middleware('auth:web')->group(function () {
-    Route::prefix('crash-log')->middleware('auth:web')->group(function () {
-        Route::get('/', [CrashLogController::class, 'index']);
-        Route::delete('/clear', [CrashLogController::class, 'clear']);
-    });
-    Route::prefix('activity-log')->middleware('auth:web')->group(function () {
-        Route::get('/', [ActivityLogController::class, 'index']);
-        Route::delete('/clear', [ActivityLogController::class, 'clear']);
     });
 });

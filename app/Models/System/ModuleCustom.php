@@ -2,12 +2,18 @@
 
 namespace App\Models\System;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ActivityLog extends Model
+class ModuleCustom extends Model
 {
     use HasFactory;
+
+    public function moduleCustomUsers(): HasMany
+    {
+        return $this->hasMany(ModuleCustomUser::class, 'module_custom_id');
+    }
 
     protected static function boot()
     {
