@@ -8,6 +8,8 @@ use App\Models\System\Navbar;
 use App\Models\System\Subnavbar;
 use App\Models\System\ModuleCustom;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ModuleCustom\StoreModuleCutomRequest;
+use App\Http\Requests\ModuleCustom\UpdateModuleCutomRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\System\ModuleCustomUser;
 
@@ -27,11 +29,9 @@ class ModuleCustomController extends Controller
         return view('pages.setting.module-custom.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreModuleCutomRequest $request): RedirectResponse
     {
-        $formFields = $request->validate([
-            'description' => 'required'
-        ]);
+        $formFields = $request->validated();
 
         $countData = ModuleCustom::count();
         $code = "TSK-" . str_pad($countData + 1, 4, '0', STR_PAD_LEFT);
@@ -76,11 +76,9 @@ class ModuleCustomController extends Controller
         return view('pages.setting.module-custom.edit', $data);
     }
 
-    public function update(ModuleCustom $moduleCustom, Request $request): RedirectResponse
+    public function update(ModuleCustom $moduleCustom, UpdateModuleCutomRequest $request): RedirectResponse
     {
-        $formFields = $request->validate([
-            'subnavbars' => 'required'
-        ]);
+        $formFields = $request->validated();
 
         // Checking the navnars
         $navbars = [];
