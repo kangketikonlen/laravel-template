@@ -6,6 +6,7 @@ use App\Models\System\Module;
 use App\Models\System\Navbar;
 use App\Models\System\AppInfo;
 use App\Models\System\Institution;
+use App\Models\System\ModuleCustomUser;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -33,10 +34,13 @@ class AppServiceProvider extends ServiceProvider
             $appInfo = AppInfo::first();
             $institution = Institution::first();
             $modules = Module::get();
+            $moduleCustomUsers = ModuleCustomUser::where('user_id', session('id'))->get();
+            // =====================================
             $view->with('navbars', $navbars);
             $view->with('appInfo', $appInfo);
             $view->with('institution', $institution);
             $view->with('modules', $modules);
+            $view->with('moduleCustomUsers', $moduleCustomUsers);
         });
         Paginator::useBootstrapFive();
         if (config('app.env') === 'production') {

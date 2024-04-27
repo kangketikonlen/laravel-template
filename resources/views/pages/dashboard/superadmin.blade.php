@@ -27,9 +27,11 @@
                     <div class="col-12">
                         @include('pages.dashboard.components.main-module')
                     </div>
-                    <div class="col-12">
-                        @include('pages.dashboard.components.additional-module')
-                    </div>
+                    @if (!$moduleCustomUsers->isEmpty())
+                        <div class="col-12">
+                            @include('pages.dashboard.components.additional-module')
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
