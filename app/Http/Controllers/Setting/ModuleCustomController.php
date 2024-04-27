@@ -10,6 +10,7 @@ use App\Models\System\ModuleCustom;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ModuleCustom\StoreModuleCutomRequest;
 use App\Http\Requests\ModuleCustom\UpdateModuleCutomRequest;
+use App\Http\Requests\ModuleCustomUser\StoreModuleCutomUserRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\System\ModuleCustomUser;
 
@@ -51,11 +52,9 @@ class ModuleCustomController extends Controller
         return view('pages.setting.module-custom.add-user', $data);
     }
 
-    public function store_user(ModuleCustom $moduleCustom, Request $request): RedirectResponse
+    public function store_user(ModuleCustom $moduleCustom, StoreModuleCutomUserRequest $request): RedirectResponse
     {
-        $formFields = $request->validate([
-            'user_id' => 'required'
-        ]);
+        $formFields = $request->validated();
 
         foreach ($formFields['user_id'] as $user) {
             $moduleCustomUser['user_id'] = $user;
