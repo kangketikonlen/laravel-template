@@ -18,5 +18,12 @@ class SettingSubnavbarSeeder extends Seeder
             'url' => '/setting/institution',
             'roles' => 'general'
         ]);
+
+        Subnavbar::create([
+            'navbar_id' => '2',
+            'name' => 'Custom Module',
+            'url' => '/setting/custom-module',
+            'roles' => 'general'
+        ]);
     }
 }

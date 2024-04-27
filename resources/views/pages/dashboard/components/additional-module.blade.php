@@ -3,15 +3,16 @@
          <h4 class="m-0">Modul Tambahan</h4>
      </div>
      <div class="card-body p-2">
-         <ul class="nav row">
+         <ul class="nav row text-center">
              @foreach ($moduleCustomUsers as $moduleCustomUser)
                  <li class="nav-item col-2">
-                     <a class="nav-link d-flex flex-column align-items-center" href="{{ $moduleCustomUser->url }}">
+                     <a class="nav-link d-flex flex-column align-items-center"
+                         href="{{ $moduleCustomUser->moduleCustom->url }}">
                          <span class="d-inline-block bg-primary rounded p-3">
-                             <i class="fa fa-2x {{ $moduleCustomUser->icon }} order-1 text-white"></i>
+                             <i class="fa fa-2x {{ $moduleCustomUser->moduleCustom->icon }} order-1 text-white"></i>
                          </span>
                          <span class="order-2 mt-2">
-                             <span class="fw-bold d-block">{{ $moduleCustomUser->description }}</span>
+                             <span class="fw-bold d-block">{{ $moduleCustomUser->moduleCustom->description }}</span>
                          </span>
                      </a>
                  </li>

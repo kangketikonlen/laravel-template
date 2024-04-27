@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Setting\InstitutionController;
+use App\Http\Controllers\Setting\ModuleCustomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::namespace('Dashboard')->prefix('dashboard')->middleware('auth:web')->grou
     Route::get('/administrator', [DashboardController::class, 'administrator']);
     // ========================== //
     Route::get('/switch', [DashboardController::class, 'switch']);
+    Route::get('/switch-task', [DashboardController::class, 'switch_task']);
     Route::get('/reset', [DashboardController::class, 'reset']);
     Route::get('/logout', [PortalController::class, 'logout']);
 });
@@ -54,6 +56,16 @@ Route::namespace('Setting')->prefix('setting')->middleware('auth:web')->group(fu
     Route::prefix('institution')->middleware('auth:web')->group(function () {
         Route::get('/', [InstitutionController::class, 'index']);
         Route::put('/update', [InstitutionController::class, 'update']);
+    });
+    Route::prefix('custom-module')->middleware('auth:web')->group(function () {
+        Route::get('/', [ModuleCustomController::class, 'index']);
+        Route::get('/create', [ModuleCustomController::class, 'create']);
+        Route::post('/store', [ModuleCustomController::class, 'store']);
+        Route::get('/{moduleCustom}/add-user', [ModuleCustomController::class, 'add_user']);
+        Route::put('/{moduleCustom}/store-user', [ModuleCustomController::class, 'store_user']);
+        Route::get('/{moduleCustom}/edit', [ModuleCustomController::class, 'edit']);
+        Route::put('/{moduleCustom}/update', [ModuleCustomController::class, 'update']);
+        Route::delete('/{moduleCustom}/delete', [ModuleCustomController::class, 'delete']);
     });
 });
 

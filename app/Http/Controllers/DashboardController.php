@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\System\Module;
+use App\Models\System\ModuleCustom;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 
@@ -28,6 +29,27 @@ class DashboardController extends Controller
     public function switch(Request $request): RedirectResponse
     {
         $module = Module::where('code', $request->get('mod'))->first();
+        if (!empty($module)) {
+            $session = array(
+                'code' => $module->id,
+                'module_name' => $module->description,
+                'role_navbars' => $module->navbars,
+                'role_subnavbars' => $module->subnavbars,
+                'role_url' => '/dashboard/task',
+                'role_page' => 0,
+                'additional_page' => 1
+            );
+
+            Session::put($session);
+
+            return redirect($session['role_url'])->with('alert', ['status', 'success', 'message' => "Session changed!"]);
+        }
+        return redirect('/')->with('alert', ['status', 'danger', 'message' => "Session failed to change!"]);
+    }
+
+    public function switch_task(Request $request): RedirectResponse
+    {
+        $module = ModuleCustom::where('code', $request->get('code'))->first();
         if (!empty($module)) {
             $session = array(
                 'code' => $module->id,
