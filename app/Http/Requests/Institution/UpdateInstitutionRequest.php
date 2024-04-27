@@ -27,8 +27,8 @@ class UpdateInstitutionRequest extends FormRequest
             'email' => 'required',
             'website' => 'required',
             'contact' => 'required',
-            'logo' => 'image|max:1024',
-            'background' => 'image|max:1024',
+            'logo' => 'image',
+            'background' => 'image',
         ];
     }
 }

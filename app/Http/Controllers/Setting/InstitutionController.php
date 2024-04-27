@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers\Setting;
 
-use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\System\Institution;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Institution\UpdateInstitutionRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Http\Requests\Institution\UpdateInstitutionRequest;
+use App\Services\InstitutionService;
 
 class InstitutionController extends Controller
 {
     protected string $url = "/setting/institution";
+    protected InstitutionService $service;
+
+    public function __construct(InstitutionService $service)
+    {
+        $this->service = $service;
+    }
 
     public function index(): View
     {
-        $data['institution'] = Institution::first();
+        $data['institution'] = $this->service->get_single_instititution();
         return view('pages.setting.institution.index', $data);
     }
 
@@ -24,23 +31,22 @@ class InstitutionController extends Controller
         $formFields = $request->validated();
 
         if ($request->hasFile('logo')) {
-            /** @var \Illuminate\Http\UploadedFile $file */
             $file = $request->file('logo');
-            $filename = 'logo-' . date("ymdhis") . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/images/logo/', $filename);
-            $formFields['logo'] = '/storage/images/logo/' . $filename;
+            $path = '/storage/images/logo/';
+            $real_path = 'public/images/logo/';
+
+            $formFields['logo'] = $this->service->convert_image($file, $real_path, $path, 150, 150);
         }
 
         if ($request->hasFile('background')) {
-            /** @var \Illuminate\Http\UploadedFile $file */
             $file = $request->file('background');
-            $filename = 'background-' . date("ymdhis") . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/images/background/', $filename);
-            $formFields['background'] = '/storage/images/background/' . $filename;
+            $path = '/storage/images/background/';
+            $real_path = 'public/images/background/';
+
+            $formFields['background'] = $this->service->convert_image($file, $real_path, $path, 1920, 1080);
         }
 
-        $institution = Institution::first();
-        $institution?->update($formFields);
+        $this->service->update_institution($formFields);
 
         return redirect($this->url)->with('alert', ['message' => 'Data has been updated!', 'status' => 'warning']);
     }
