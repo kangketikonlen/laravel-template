@@ -4,24 +4,37 @@ namespace App\Http\Controllers\Setting;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Models\System\Navbar;
-use App\Models\System\Subnavbar;
 use App\Models\System\ModuleCustom;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ModuleCustom\StoreModuleCutomRequest;
 use App\Http\Requests\ModuleCustom\UpdateModuleCutomRequest;
 use App\Http\Requests\ModuleCustomUser\StoreModuleCutomUserRequest;
 use Illuminate\Http\RedirectResponse;
-use App\Models\System\ModuleCustomUser;
+use App\Services\ModuleCustomService;
+use App\Services\ModuleCustomUserService;
+use App\Services\NavbarService;
+use App\Services\SubnavbarService;
 
 class ModuleCustomController extends Controller
 {
     protected string $url = "/setting/custom-module";
+    protected ModuleCustomService $service;
+    protected ModuleCustomUserService $moduleCustomUserService;
+    protected NavbarService $navbarService;
+    protected SubnavbarService $subnavbarService;
+
+    public function __construct(ModuleCustomService $service, ModuleCustomUserService $moduleCustomUserService, NavbarService $navbarService, SubnavbarService $subnavbarService)
+    {
+        $this->service = $service;
+        $this->moduleCustomUserService = $moduleCustomUserService;
+        $this->navbarService = $navbarService;
+        $this->subnavbarService = $subnavbarService;
+    }
 
     public function index(Request $request): View
     {
         $data['query'] = $request->input('query');
-        $data['moduleCustoms'] = ModuleCustom::paginate(10)->appends(request()->query());
+        $data['moduleCustoms'] = $this->service->get_paginate_module_custom();
         return view('pages.setting.module-custom.index', $data);
     }
 
@@ -33,15 +46,7 @@ class ModuleCustomController extends Controller
     public function store(StoreModuleCutomRequest $request): RedirectResponse
     {
         $formFields = $request->validated();
-
-        $countData = ModuleCustom::count();
-        $code = "TSK-" . str_pad($countData + 1, 4, '0', STR_PAD_LEFT);
-
-        $moduleData['code'] = $code;
-        $moduleData['icon'] = "fa-list";
-        $moduleData['url'] = '/dashboard/switch-task?code=' . $code;
-        $moduleData['description'] = $formFields['description'];
-        $newModule = ModuleCustom::create($moduleData);
+        $newModule = $this->service->create_module_custom($formFields);
 
         return redirect($this->url . '/' . $newModule->id . '/edit')->with('alert', ['message' => 'Data tersimpan, silahkan pilih daftar isi apa saja yang akan ditambahkan!', 'status' => 'success']);
     }
@@ -55,15 +60,7 @@ class ModuleCustomController extends Controller
     public function store_user(ModuleCustom $moduleCustom, StoreModuleCutomUserRequest $request): RedirectResponse
     {
         $formFields = $request->validated();
-
-        foreach ($formFields['user_id'] as $user) {
-            $moduleCustomUser['user_id'] = $user;
-            $moduleCustomUser['module_custom_id'] = $moduleCustom->id;
-            $isExists = ModuleCustomUser::where($moduleCustomUser)->first();
-            if (empty($isExists)) {
-                ModuleCustomUser::create($moduleCustomUser);
-            }
-        }
+        $this->moduleCustomUserService->create_module_custom_user($formFields, $moduleCustom);
 
         return redirect($this->url)->with('alert', ['message' => 'Data has been updated!', 'status' => 'success']);
     }
@@ -71,34 +68,21 @@ class ModuleCustomController extends Controller
     public function edit(ModuleCustom $moduleCustom): View
     {
         $data['moduleCustom'] = $moduleCustom;
-        $data['navs'] = Navbar::get();
+        $data['navs'] = $this->navbarService->get_all_navbars();
         return view('pages.setting.module-custom.edit', $data);
     }
 
     public function update(ModuleCustom $moduleCustom, UpdateModuleCutomRequest $request): RedirectResponse
     {
         $formFields = $request->validated();
-
-        // Checking the navnars
-        $navbars = [];
-        foreach ($formFields['subnavbars'] as $subnavbar) {
-            $subnavbar = Subnavbar::find($subnavbar);
-            if (!in_array($subnavbar->navbar_id, $navbars)) {
-                $navbars[] = $subnavbar->navbar_id;
-            }
-        }
-
-        $formFields['navbars'] = implode(",", $navbars);
-        $formFields['subnavbars'] = implode(",", $formFields['subnavbars']);
-
-        $moduleCustom->update($formFields);
+        $this->service->update_module_custom($moduleCustom, $formFields);
 
         return redirect($this->url)->with('alert', ['message' => 'Data has been updated!', 'status' => 'success']);
     }
 
     public function delete(ModuleCustom $moduleCustom): RedirectResponse
     {
-        $moduleCustom->delete();
+        $this->service->delete_module_custom($moduleCustom);
 
         return redirect($this->url)->with('alert', ['message' => 'Data has been deleted!', 'status' => 'danger']);
     }
