@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Setting;
 use Illuminate\Http\Request;
 use App\Models\System\Institution;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Institution\UpdateInstitutionRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -18,17 +19,9 @@ class InstitutionController extends Controller
         return view('pages.setting.institution.index', $data);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(UpdateInstitutionRequest $request): RedirectResponse
     {
-        $formFields = $request->validate([
-            'name' => 'required',
-            'address' => 'required',
-            'email' => 'required',
-            'website' => 'required',
-            'contact' => 'required',
-            'logo' => 'image|max:1024',
-            'background' => 'image|max:1024',
-        ]);
+        $formFields = $request->validated();
 
         if ($request->hasFile('logo')) {
             /** @var \Illuminate\Http\UploadedFile $file */
