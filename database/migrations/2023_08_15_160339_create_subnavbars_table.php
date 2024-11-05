@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('subnavbars', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('navbar_id');
+            $table->string('code')->unique()->nullable(true)->default(null);
             $table->string('name');
-            $table->string('url');
+            $table->string('url')->unique();
             $table->string('roles')->default(1);
-            $table->string('createdBy')->default('System');
-            $table->timestamp('createdAt')->default(now());
-            $table->string('updatedBy')->nullable(true)->default(null);
-            $table->timestamp('updatedAt')->nullable(true)->default(null);
+            $table->string('created_by')->default('System');
+            $table->string('updated_by')->nullable(true)->default(null);
             $table->timestamps();
             $table->foreign('navbar_id')->references('id')->on('navbars')->onDelete('cascade');
         });

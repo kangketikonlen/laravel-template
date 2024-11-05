@@ -67,7 +67,7 @@
                             </a>
                             <ul id="{{ $navbar->name }}">
                                 @foreach ($navbar->subnavbars as $subnavbar)
-                                    @if (in_array($subnavbar->id, explode(',', session('role_subnavbars'))))
+                                    @if (in_array($subnavbar->code, explode(',', session('role_subnavbars'))))
                                         <li>
                                             <a href="{{ $subnavbar->url }}">
                                                 <span class="label">{{ $subnavbar->name }}</span>

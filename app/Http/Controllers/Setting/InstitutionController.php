@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Setting;
 
 use Illuminate\View\View;
-use Intervention\Image\ImageManagerStatic as Image;
-use App\Models\System\Institution;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Institution\UpdateInstitutionRequest;

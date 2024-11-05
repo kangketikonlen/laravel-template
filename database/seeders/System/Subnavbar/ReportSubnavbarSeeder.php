@@ -12,11 +12,22 @@ class ReportSubnavbarSeeder extends Seeder
      */
     public function run(): void
     {
-        Subnavbar::create([
+        $sub = Subnavbar::create([
             'navbar_id' => '4',
             'name' => 'Riwayat Aktivitas',
             'url' => '/report/activity-log',
             'roles' => 'general'
         ]);
+        $code = explode("/", $sub->url)[2];
+        $sub->update(['code' => $code]);
+
+        $sub = Subnavbar::create([
+            'navbar_id' => '4',
+            'name' => 'Riwayat Error',
+            'url' => '/report/error-log',
+            'roles' => 'general'
+        ]);
+        $code = explode("/", $sub->url)[2];
+        $sub->update(['code' => $code]);
     }
 }

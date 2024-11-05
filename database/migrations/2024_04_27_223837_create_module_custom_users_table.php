@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('module_custom_id');
-            $table->string('createdBy')->default('System');
-            $table->timestamp('createdAt')->default(now());
-            $table->string('updatedBy')->nullable(true)->default(null);
-            $table->timestamp('updatedAt')->nullable(true)->default(null);
+            $table->string('created_by')->default('System');
+            $table->string('updated_by')->nullable(true)->default(null);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('module_custom_id')->references('id')->on('module_customs')->onDelete('cascade');

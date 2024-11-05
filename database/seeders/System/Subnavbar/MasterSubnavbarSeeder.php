@@ -12,11 +12,13 @@ class MasterSubnavbarSeeder extends Seeder
      */
     public function run(): void
     {
-        Subnavbar::create([
+        $sub = Subnavbar::create([
             'navbar_id' => '1',
             'name' => 'Pengguna',
             'url' => '/master/user',
             'roles' => 'general'
         ]);
+        $code = explode("/", $sub->url)[2];
+        $sub->update(['code' => $code]);
     }
 }

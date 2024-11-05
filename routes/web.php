@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\Administration\MaintenanceController;
 use App\Http\Controllers\Report\ActivityLogController;
-use App\Http\Controllers\Report\CrashLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Report\ErrorLogController;
 use App\Http\Controllers\Setting\InstitutionController;
 use App\Http\Controllers\Setting\ModuleCustomController;
 
@@ -73,5 +73,14 @@ Route::namespace('Administration')->prefix('administration')->middleware('auth:w
     Route::prefix('maintenance')->middleware('auth:web')->group(function () {
         Route::get('/', [MaintenanceController::class, 'index']);
         Route::get('/process', [MaintenanceController::class, 'process']);
+    });
+});
+
+Route::namespace('Report')->prefix('report')->middleware('auth:web')->group(function () {
+    Route::prefix('activity-log')->middleware('auth:web')->group(function () {
+        Route::get('/', [ActivityLogController::class, 'index']);
+    });
+    Route::prefix('error-log')->middleware('auth:web')->group(function () {
+        Route::get('/', [ErrorLogController::class, 'index']);
     });
 });

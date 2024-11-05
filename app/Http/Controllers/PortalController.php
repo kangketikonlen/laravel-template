@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\System\AppInfo;
 use App\Models\System\Institution;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -25,9 +26,9 @@ class PortalController extends Controller
             'password' => 'required'
         ]);
 
-        if (auth()->attempt($formFields)) {
+        if (Auth::attempt($formFields)) {
             $request->session()->regenerate();
-            $user = auth()->user();
+            $user = Auth::user();
 
             // Create session
             $session = array(
@@ -57,7 +58,7 @@ class PortalController extends Controller
 
     private function invalidate_session(Request $request): void
     {
-        auth()->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         $request->session()->flush();

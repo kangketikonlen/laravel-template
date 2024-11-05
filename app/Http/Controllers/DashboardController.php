@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\System\Module;
 use App\Models\System\ModuleCustom;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
@@ -70,7 +71,7 @@ class DashboardController extends Controller
 
     public function reset(): RedirectResponse
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $session = array(
             'role_id' => $user?->role_id,
             'role_name' => $user?->roles?->name,

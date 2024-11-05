@@ -17,8 +17,7 @@ class GeneralSettingSeeder extends Seeder
         $navbars = Navbar::get();
         $subnavbars = Subnavbar::get();
         //
-        $count = 1;
-        $code = 'mod-' . str_pad(strval($count), 4, "0", STR_PAD_LEFT);
+        $code = uniqid('mod-', true);
         //
         $navbarArray = [];
         foreach ($navbars as $navbar) {
@@ -29,7 +28,7 @@ class GeneralSettingSeeder extends Seeder
         $subnavbarArray = [];
         foreach ($subnavbars as $subnavbar) {
             if ($subnavbar->roles === 'general') {
-                $subnavbarArray[] = $subnavbar->id;
+                $subnavbarArray[] = $subnavbar->code;
             }
         }
         Module::create([

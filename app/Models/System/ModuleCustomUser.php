@@ -27,13 +27,11 @@ class ModuleCustomUser extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->createdAt = $model->freshTimestamp();
-            $model->createdBy = Auth::check() ? session('name') : "System";
+            $model->created_by = Auth::check() ? session('name') : "System";
         });
 
         static::updating(function ($model) {
-            $model->updatedAt = $model->freshTimestamp();
-            $model->updatedBy = Auth::check() ? session('name') : "System";
+            $model->updated_by = Auth::check() ? session('name') : null;
         });
     }
 }
