@@ -12,11 +12,13 @@ class AdministrationSubnavbarSeeder extends Seeder
      */
     public function run(): void
     {
-        Subnavbar::create([
+        $sub = Subnavbar::create([
             'navbar_id' => '3',
             'name' => 'Maintenance Mode',
             'url' => '/administration/maintenance',
             'roles' => 'general'
         ]);
+        $code = explode("/", $sub->url)[2];
+        $sub->update(['code' => $code]);
     }
 }

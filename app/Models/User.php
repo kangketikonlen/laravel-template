@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -23,13 +24,11 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($model) {
-            $model->createdAt = $model->freshTimestamp();
-            $model->createdBy = auth()->check() ? session('name') : "System";
+            $model->created_by = Auth::check() ? session('name') : "System";
         });
 
         static::updating(function ($model) {
-            $model->updatedAt = $model->freshTimestamp();
-            $model->updatedBy = auth()->check() ? session('name') : "System";
+            $model->updated_by = Auth::check() ? session('name') : null;
         });
     }
 }

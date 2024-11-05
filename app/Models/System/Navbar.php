@@ -6,6 +6,7 @@ use App\Models\System\Subnavbar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 class Navbar extends Model
 {
@@ -21,13 +22,11 @@ class Navbar extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->createdAt = $model->freshTimestamp();
-            $model->createdBy = auth()->check() ? session('name') : "System";
+            $model->created_by = Auth::check() ? session('name') : "System";
         });
 
         static::updating(function ($model) {
-            $model->updatedAt = $model->freshTimestamp();
-            $model->updatedBy = auth()->check() ? session('name') : "System";
+            $model->updated_by = Auth::check() ? session('name') : null;
         });
     }
 }

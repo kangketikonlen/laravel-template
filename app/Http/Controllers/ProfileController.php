@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -13,7 +14,7 @@ class ProfileController extends Controller
 
     public function index(): View
     {
-        $data['user'] = auth()->user();
+        $data['user'] = Auth::user();
         return view('pages.profile', $data);
     }
 
@@ -33,7 +34,7 @@ class ProfileController extends Controller
             $formFields['picture'] = '/storage/images/profile/' . $filename;
         }
 
-        $user = User::find(auth()->user()?->id);
+        $user = User::find(Auth::user()?->id);
         $user?->update($formFields);
 
         $this->invalidate_session($request);
@@ -48,7 +49,7 @@ class ProfileController extends Controller
         $newPassword = "USR" . $serialCode . "P";
 
         $hashedPassword['password'] = bcrypt($newPassword);
-        $user = User::find(auth()->user()?->id);
+        $user = User::find(Auth::user()?->id);
         $user?->update($hashedPassword);
 
         return redirect($this->url)->with('alert', ['message' => 'Password has been reset, your new password is ' . $newPassword, 'status' => 'success']);
@@ -56,7 +57,7 @@ class ProfileController extends Controller
 
     private function invalidate_session(Request $request): void
     {
-        auth()->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         $request->session()->flush();

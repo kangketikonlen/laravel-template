@@ -12,18 +12,22 @@ class SettingSubnavbarSeeder extends Seeder
      */
     public function run(): void
     {
-        Subnavbar::create([
+        $sub = Subnavbar::create([
             'navbar_id' => '2',
             'name' => 'Informasi Institusi',
             'url' => '/setting/institution',
             'roles' => 'general'
         ]);
+        $code = explode("/", $sub->url)[2];
+        $sub->update(['code' => $code]);
 
-        Subnavbar::create([
+        $sub = Subnavbar::create([
             'navbar_id' => '2',
             'name' => 'Custom Module',
             'url' => '/setting/custom-module',
             'roles' => 'general'
         ]);
+        $code = explode("/", $sub->url)[2];
+        $sub->update(['code' => $code]);
     }
 }

@@ -2,19 +2,13 @@
 
 namespace App\Models\System;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Subnavbar extends Model
+class ActivityLog extends Model
 {
     use HasFactory;
-
-    public function navbars(): BelongsTo
-    {
-        return $this->belongsTo(Navbar::class, 'navbar_id');
-    }
 
     protected static function boot()
     {

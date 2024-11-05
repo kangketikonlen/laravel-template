@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class ModuleCustomUser extends Model
 {
@@ -26,13 +27,11 @@ class ModuleCustomUser extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->createdAt = $model->freshTimestamp();
-            $model->createdBy = auth()->check() ? session('name') : "System";
+            $model->created_by = Auth::check() ? session('name') : "System";
         });
 
         static::updating(function ($model) {
-            $model->updatedAt = $model->freshTimestamp();
-            $model->updatedBy = auth()->check() ? session('name') : "System";
+            $model->updated_by = Auth::check() ? session('name') : null;
         });
     }
 }

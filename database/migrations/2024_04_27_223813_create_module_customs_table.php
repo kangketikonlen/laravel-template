@@ -19,10 +19,8 @@ return new class extends Migration
             $table->string('url');
             $table->string('navbars')->nullable(true)->default(null);
             $table->string('subnavbars')->nullable(true)->default(null);
-            $table->string('createdBy')->default('System');
-            $table->timestamp('createdAt')->default(now());
-            $table->string('updatedBy')->nullable(true)->default(null);
-            $table->timestamp('updatedAt')->nullable(true)->default(null);
+            $table->string('created_by')->default('System');
+            $table->string('updated_by')->nullable(true)->default(null);
             $table->timestamps();
         });
     }
