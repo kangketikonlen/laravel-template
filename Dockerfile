@@ -41,9 +41,7 @@ ENV DB_CONNECTION=mysql \
 
 # Copy and set permissions for entrypoint and shell scripts in one step
 COPY .docker/bin/docker-php-entrypoint.sh /usr/local/bin/docker-php-entrypoint
-COPY .docker/bin/start-migration.sh /usr/local/bin/start-migration
-RUN dos2unix /usr/local/bin/docker-php-entrypoint \
-    && chmod +x /usr/local/bin/start-migration
+RUN dos2unix /usr/local/bin/docker-php-entrypoint
 
 # Copy configuration files and setup nginx, supervisord, and cron jobs in one step
 COPY .docker/conf/nginx.conf /etc/nginx/nginx.conf
